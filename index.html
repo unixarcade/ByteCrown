@@ -1,0 +1,519 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#050806">
+<meta name="author" content="Luminosity + Gpteus">
+<meta name="description" content="BYTE//CROWN: a complete byte-native computer, assembler, protocol, debugger, and Playwright-controllable executable ISA laboratory in one HTML file.">
+<title>BYTE//CROWN — Full Byte Computer</title>
+<style>
+:root{--bg:#030604;--panel:#07100a;--panel2:#0a160e;--ink:#d8ffe1;--white:#f7fff8;--mut:#75947d;--line:#234c31;--line2:#3b7550;--green:#65ff91;--acid:#caff79;--cyan:#62f3ff;--gold:#ffd66b;--red:#ff6f7d;--violet:#bd91ff;--shadow:0 22px 70px #000a;--mono:ui-monospace,"SFMono-Regular",Consolas,"Liberation Mono",monospace;--sans:Inter,ui-sans-serif,system-ui,sans-serif}
+*{box-sizing:border-box}html,body{height:100%;margin:0}body{background:radial-gradient(70rem 40rem at 78% -10%,#173d244f,transparent 65%),radial-gradient(55rem 35rem at -8% 105%,#1746572b,transparent 68%),repeating-linear-gradient(90deg,#fff0 0 63px,#8cffb704 64px),var(--bg);color:var(--ink);font:13px/1.42 var(--mono);overflow:hidden;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer}.app{height:100%;display:grid;grid-template-rows:auto minmax(0,1fr) auto;gap:8px;padding:8px}.panel{background:linear-gradient(145deg,#0a160ed9,#061009ed);border:1px solid var(--line);box-shadow:var(--shadow);border-radius:13px;overflow:hidden}.top{min-height:64px;display:flex;align-items:center;gap:12px;padding:9px 11px}.brand{display:flex;align-items:center;gap:10px;min-width:255px}.mark{width:42px;height:42px;border:1px solid var(--line2);border-radius:11px;display:grid;place-items:center;background:#020503;color:var(--green);font:900 19px var(--mono);box-shadow:inset 0 0 24px #55ff7f1a,0 0 25px #43ff7921}.brand h1{margin:0;color:var(--white);font-size:16px;line-height:1;letter-spacing:.13em}.brand p{margin:5px 0 0;color:var(--mut);font-size:9px;letter-spacing:.11em;text-transform:uppercase}.grow{flex:1}.controls,.row,.tabs{display:flex;align-items:center;gap:6px;flex-wrap:wrap}.btn,.field,select{border:1px solid var(--line2);background:#030805;border-radius:8px;padding:8px 10px;min-height:34px}.btn{font-weight:800;font-size:10px;letter-spacing:.08em;text-transform:uppercase;transition:.14s}.btn:hover,.btn:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:0;border-color:var(--green);box-shadow:0 0 0 3px #65ff911c}.btn.primary{background:var(--green);border-color:var(--green);color:#021006}.btn.hot{color:var(--gold);border-color:#8c6b22}.btn.danger{color:var(--red);border-color:#7a3039}.btn.on{background:#173921;color:var(--white)}.btn.small{padding:6px 8px;min-height:28px;font-size:9px}.chip{display:inline-flex;align-items:center;gap:7px;border:1px solid var(--line);border-radius:999px;padding:6px 9px;color:var(--mut);font-size:9px;font-weight:900;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}.chip i{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green)}.chip.warn i{background:var(--gold);box-shadow:0 0 12px var(--gold)}.chip.bad i{background:var(--red);box-shadow:0 0 12px var(--red)}
+.main{min-height:0;display:grid;grid-template-columns:minmax(280px,31%) minmax(430px,1fr) minmax(290px,30%);gap:8px}.column{min-height:0;display:grid;gap:8px}.left{grid-template-rows:minmax(300px,1fr) minmax(130px,.42fr)}.center{grid-template-rows:auto minmax(260px,1fr) auto}.right{grid-template-rows:minmax(250px,.9fr) minmax(210px,.7fr) minmax(110px,.38fr)}.head{min-height:42px;padding:9px 11px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:8px}.head h2{margin:0;color:var(--white);font-size:10px;letter-spacing:.14em;text-transform:uppercase}.head small{color:var(--mut);font-size:9px}.body{padding:9px;min-height:0;overflow:auto}.editorPanel{display:grid;grid-template-rows:auto minmax(0,1fr) auto}.editorWrap{position:relative;min-height:0;background:#020503}.gutter{position:absolute;left:0;top:0;bottom:0;width:42px;padding:12px 7px;color:#496552;text-align:right;white-space:pre;overflow:hidden;pointer-events:none;font-size:11px;line-height:1.55;border-right:1px solid #173020;background:#030806}.source{width:100%;height:100%;min-height:0;resize:none;border:0;background:transparent;color:#d9ffe2;padding:12px 12px 80px 52px;line-height:1.55;tab-size:2;caret-color:var(--green);white-space:pre;overflow:auto}.source:focus{box-shadow:inset 0 0 0 1px var(--green)}.editorFoot{display:flex;justify-content:space-between;gap:8px;padding:7px 10px;border-top:1px solid var(--line);color:var(--mut);font-size:9px}.output{white-space:pre;min-height:0;overflow:auto;color:#9fc7a8;font-size:10px;line-height:1.52}.output .err{color:var(--red)}.output .ok{color:var(--green)}
+.cpuPanel{padding:9px}.bus{display:grid;grid-template-columns:repeat(7,minmax(58px,1fr));gap:6px;margin-bottom:8px}.readout{border:1px solid var(--line);background:#030705;border-radius:9px;padding:7px 8px;min-width:0}.readout span{display:block;color:var(--mut);font-size:8px;font-weight:900;letter-spacing:.12em;text-transform:uppercase}.readout b{display:block;margin-top:3px;color:var(--white);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.flags{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:8px}.flag{min-width:31px;border:1px solid var(--line);border-radius:7px;padding:5px 6px;text-align:center;color:#52715a;font-weight:900;font-size:9px}.flag.on{color:#061008;background:var(--green);border-color:var(--green);box-shadow:0 0 13px #65ff913d}.registers{display:grid;grid-template-columns:repeat(8,1fr);gap:5px}.reg{border:1px solid var(--line);border-radius:8px;background:#030705;padding:6px 7px;text-align:left;min-width:0}.reg:hover{border-color:var(--cyan)}.reg span{display:block;color:var(--mut);font-size:8px}.reg b{display:block;color:var(--white);font-size:13px}.reg.sel{border-color:var(--green);box-shadow:inset 0 0 13px #65ff9119}.workPanel{display:grid;grid-template-rows:auto minmax(0,1fr)}.tab{border:0;border-bottom:2px solid transparent;background:transparent;color:var(--mut);padding:9px 10px;font-size:9px;font-weight:900;letter-spacing:.09em;text-transform:uppercase}.tab.on{color:var(--white);border-color:var(--green)}.pane{display:none;min-height:0;overflow:auto}.pane.on{display:block}.memoryTools{display:flex;gap:6px;align-items:center;padding:7px 9px;border-bottom:1px solid var(--line);position:sticky;top:0;background:#07100af2;z-index:3}.field{width:86px;padding:6px 8px;min-height:30px}.memory{display:grid;grid-template-columns:32px repeat(16,minmax(24px,1fr));gap:2px;padding:8px;min-width:560px}.mh{color:#52715a;text-align:center;font-size:8px;padding:4px 0}.cell{border:1px solid #142c1d;background:#020604;color:#9dcba7;border-radius:4px;padding:5px 1px;text-align:center;font-size:9px;min-width:0}.cell:hover{border-color:var(--cyan);color:var(--white)}.cell.pc{background:#163b22;color:var(--white);border-color:var(--green);box-shadow:0 0 8px #65ff9133}.cell.sp{border-color:var(--gold)}.cell.sel{background:#123344;color:var(--cyan);border-color:var(--cyan)}.cell.vram{color:#bd91ff}.disasm{padding:7px}.ins{display:grid;grid-template-columns:18px 54px 120px minmax(130px,1fr);gap:7px;padding:5px 7px;border-bottom:1px solid #13291b;align-items:center;font-size:10px}.ins:hover{background:#0e2115}.ins.current{background:#173821;color:var(--white)}.ins.breakpoint .bp{color:var(--red)}.ins .addr{color:var(--cyan)}.ins .bytes{color:#668d70}.ins .op{color:var(--white)}.isa{padding:8px}.isaSearch{width:100%;margin-bottom:8px}.isaRow{display:grid;grid-template-columns:52px 76px 76px 1fr;gap:8px;padding:6px;border-bottom:1px solid #142c1d;font-size:9px}.isaRow b{color:var(--white)}.isaRow code{color:var(--cyan)}
+.lens{padding:9px;display:grid;grid-template-columns:minmax(250px,1fr) minmax(240px,.85fr);gap:9px}.lensBits{display:grid;grid-template-columns:repeat(8,1fr);gap:4px}.bit{border:1px solid var(--line2);border-radius:7px;background:#020503;padding:5px 2px;text-align:center}.bit span{display:block;color:var(--mut);font-size:7px}.bit b{display:block;color:var(--white);font-size:17px}.bit.on{background:#163b22;border-color:var(--green)}.lensText{margin-top:7px;color:var(--mut);font-size:9px}.lensText code{color:var(--white)}.lensOps{display:grid;grid-template-columns:1fr auto;gap:6px}.lensOps input{width:100%}.miniGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}.miniGrid .btn{padding:5px;min-height:27px}
+.screenPanel{display:grid;grid-template-rows:auto minmax(0,1fr) auto}.screenWrap{min-height:0;display:grid;place-items:center;padding:9px;background:radial-gradient(circle at 50% 45%,#143221,#020503 70%)}#screen{width:min(100%,360px);height:auto;max-height:100%;aspect-ratio:1/1;border:1px solid var(--line2);border-radius:7px;image-rendering:pixelated;background:#000;box-shadow:0 0 30px #65ff9118}.screenFoot{padding:7px 10px;border-top:1px solid var(--line);display:flex;justify-content:space-between;color:var(--mut);font-size:9px}.terminalPanel{display:grid;grid-template-rows:auto minmax(0,1fr) auto}.terminal{margin:0;padding:10px;background:#010302;color:#baffc8;white-space:pre-wrap;word-break:break-word;overflow:auto;min-height:0}.termInput{display:flex;gap:6px;padding:7px;border-top:1px solid var(--line)}.termInput input{flex:1}.stackGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:4px}.stackCell{border:1px solid var(--line);padding:5px;border-radius:5px;text-align:center;font-size:9px}.stackCell b{color:var(--white)}.trace{margin-top:7px;max-height:75px;overflow:auto;white-space:pre;color:var(--mut);font-size:9px}
+.status{min-height:38px;padding:5px 8px 5px 10px;display:flex;justify-content:space-between;align-items:center;gap:10px;color:var(--mut);font-size:9px}.status b{color:var(--green)}#statusText{flex:1;min-width:220px}.supportActions{display:flex;align-items:center;justify-content:center;gap:6px;flex-wrap:wrap}.supportActions .btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;white-space:nowrap}.btn.share{color:var(--cyan);border-color:#27717a;background:linear-gradient(135deg,#071216,#06100a)}.btn.cash{color:#041008;border-color:var(--green);background:linear-gradient(135deg,var(--acid),var(--green));box-shadow:0 0 18px #65ff9122}.btn.cash:hover,.btn.cash:focus-visible{color:#020805;box-shadow:0 0 0 3px #65ff9122,0 0 22px #65ff9144}.aiReady{color:var(--cyan);border-color:#275f68}.aiReady i{background:var(--cyan);box-shadow:0 0 12px var(--cyan)}dialog{border:1px solid var(--line2);border-radius:13px;background:#07100a;color:var(--ink);box-shadow:0 30px 100px #000;max-width:min(900px,92vw);max-height:85vh;padding:0}dialog::backdrop{background:#000b}.modalHead{display:flex;align-items:center;gap:8px;padding:11px 13px;border-bottom:1px solid var(--line)}.modalHead h2{margin:0;color:var(--white);font-size:12px;letter-spacing:.1em}.modalBody{padding:13px;overflow:auto;max-height:70vh}.modalBody h3{color:var(--gold);font-size:11px;margin:18px 0 6px}.modalBody p,.modalBody li{color:#9bc0a4}.modalBody code{color:var(--white)}.testRow{display:grid;grid-template-columns:45px 1fr auto;gap:8px;padding:7px;border-bottom:1px solid var(--line)}.pass{color:var(--green)}.fail{color:var(--red)}.toast{position:fixed;left:50%;bottom:46px;transform:translate(-50%,15px);opacity:0;pointer-events:none;background:#d9ffe2;color:#031007;border-radius:999px;padding:8px 13px;font-size:10px;font-weight:900;z-index:50;transition:.18s}.toast.on{opacity:1;transform:translate(-50%,0)}
+@media(max-width:1120px){body{overflow:auto}.app{height:auto;min-height:100%;display:block}.top{margin-bottom:8px}.main{grid-template-columns:1fr 1fr}.right{grid-column:1/-1;grid-template-columns:1fr 1fr;grid-template-rows:minmax(300px,1fr) minmax(300px,1fr)}.right>section:last-child{grid-column:1/-1}.status{margin-top:8px}.left,.center{min-height:820px}}
+@media(max-width:760px){.main{display:block}.column{margin-bottom:8px}.left,.center,.right{display:grid;min-height:0;grid-template-columns:1fr;grid-template-rows:auto}.panel{min-height:0}.editorPanel{height:620px}.left>section:last-child{height:300px}.cpuPanel{min-height:300px}.workPanel{height:600px}.lens{grid-template-columns:1fr;min-height:340px}.screenPanel{height:470px}.terminalPanel{height:360px}.right>section:last-child{grid-column:auto;min-height:300px}.top{align-items:flex-start;flex-wrap:wrap;min-height:0}.brand{min-width:0}.controls{width:100%}.bus{grid-template-columns:repeat(3,1fr)}.registers{grid-template-columns:repeat(4,1fr)}.status{flex-direction:column;align-items:stretch;min-height:38px}.supportActions{justify-content:flex-start}.supportActions .btn{flex:1}.aiReady{align-self:flex-start}#hashOut{align-self:flex-end}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="panel top">
+    <div class="brand"><div class="mark">8</div><div><h1>BYTE//CROWN</h1><p>Full byte computer · O DDDDDD A · v2.1</p></div></div><div class="grow"></div>
+    <div class="controls">
+      <select id="demoSelect" title="Load demonstration program"><option value="crown">Crown demo</option><option value="fibonacci">Fibonacci</option><option value="interrupt">Interrupt vector</option><option value="vector">Vector forge</option><option value="pixel">Pixel bloom</option><option value="data">Pure data plane</option></select>
+      <button class="btn" id="loadDemo">Load demo</button><button class="btn primary" id="assemble">Assemble</button><button class="btn" id="run">Run</button><button class="btn" id="pause">Pause</button><button class="btn hot" id="step">Step</button><button class="btn" id="reset">Reset</button>
+      <select id="speed" title="Instructions per display frame"><option value="1">1/frame</option><option value="64">64/frame</option><option value="1024" selected>1K/frame</option><option value="16384">16K/frame</option></select><span class="chip" id="runChip"><i></i><span>READY</span></span><button class="btn" id="helpBtn">Guide</button>
+    </div>
+  </header>
+  <main class="main">
+    <div class="column left">
+      <section class="panel editorPanel">
+        <div class="head"><h2>Byte Assembler</h2><small id="sourceMeta">two-pass · labels · macros · 64 KiB</small><div class="grow"></div><button class="btn small" id="saveSource">Save</button><button class="btn small" id="exportBtn">Export</button><button class="btn small" id="importBtn">Import</button><input id="fileInput" type="file" hidden accept=".asm,.txt,.bin,.json"></div>
+        <div class="editorWrap"><div class="gutter" id="gutter">1</div><textarea class="source" id="source" spellcheck="false" aria-label="assembly source"></textarea></div><div class="editorFoot"><span id="cursorPos">LN 1 · COL 1</span><span>CTRL/⌘ + ENTER ASSEMBLES · TAB INDENTS</span></div>
+      </section>
+      <section class="panel"><div class="head"><h2>Assembly Receipt</h2><small id="receiptMeta">waiting for source</small><div class="grow"></div><button class="btn small" id="copyListing">Copy listing</button></div><div class="body output" id="assemblyOutput">BYTE//CROWN assembler ready.</div></section>
+    </div>
+    <div class="column center">
+      <section class="panel cpuPanel">
+        <div class="bus"><div class="readout"><span>PC · byte pair</span><b id="pcOut">02:00</b></div><div class="readout"><span>SP · byte pair</span><b id="spOut">FF:DF</b></div><div class="readout"><span>IR · opcode byte</span><b id="irOut">00</b></div><div class="readout"><span>MAR · address pair</span><b id="marOut">00:00</b></div><div class="readout"><span>MDR · data byte</span><b id="mdrOut">00</b></div><div class="readout"><span>Clock · 4 bytes</span><b id="clockOut">00:00:00:00</b></div><div class="readout"><span>State</span><b id="stateOut">READY</b></div></div><div class="flags" id="flags"></div><div class="registers" id="registers"></div>
+      </section>
+      <section class="panel workPanel">
+        <div class="head"><div class="tabs"><button class="tab on" data-pane="memory">Memory</button><button class="tab" data-pane="disasm">Disassembly</button><button class="tab" data-pane="isa">ISA</button></div><div class="grow"></div><small>RAM $0000–$FFFF · VRAM $F000 · MMIO $F100 · vectors $FFE0</small></div>
+        <div class="pane on" id="pane-memory"><div class="memoryTools"><label>PAGE <input class="field" id="pageInput" value="02" maxlength="4"></label><button class="btn small" id="pageGo">Go</button><button class="btn small" id="pagePC">PC page</button><button class="btn small" id="pageVRAM">VRAM</button><span class="grow"></span><label>BREAK <input class="field" id="breakInput" placeholder="0200" maxlength="6"></label><button class="btn small" id="breakAdd">Toggle</button></div><div class="memory" id="memory"></div></div>
+        <div class="pane" id="pane-disasm"><div class="memoryTools"><button class="btn small" id="disasmPC">Follow PC</button><label>FROM <input class="field" id="disasmInput" value="0200"></label><button class="btn small" id="disasmGo">Go</button><span class="grow"></span><small>click ● to toggle breakpoint</small></div><div class="disasm" id="disasm"></div></div>
+        <div class="pane" id="pane-isa"><div class="isa"><input class="field isaSearch" id="isaSearch" placeholder="Search 128 base actions + 64 extension actions"><div id="isaTable"></div></div></div>
+      </section>
+      <section class="panel lens">
+        <div><div class="head" style="padding:0 0 8px;border:0"><h2>Living Byte Lens</h2><small id="lensTarget">target · memory $0200</small></div><div class="lensBits" id="lensBits"></div><div class="lensText" id="lensMeaning"></div></div>
+        <div class="lensOps"><input class="field" id="lensValue" value="0x00" aria-label="selected byte"><input class="field" id="lensRhs" value="1" aria-label="byte operation right operand"><div class="miniGrid" style="grid-column:1/-1"><button class="btn" data-math="add">+</button><button class="btn" data-math="sub">−</button><button class="btn" data-math="shl">&lt;&lt;</button><button class="btn" data-math="shr">&gt;&gt;</button><button class="btn" data-math="and">AND</button><button class="btn" data-math="or">OR</button><button class="btn" data-math="xor">XOR</button><button class="btn" data-math="not">NOT</button></div><div class="row" style="grid-column:1/-1"><button class="btn primary" id="lensWrite">Write target</button><button class="btn hot" id="lensExec">Execute byte</button><button class="btn" id="lensRandom">Random</button></div></div>
+      </section>
+    </div>
+    <div class="column right">
+      <section class="panel screenPanel"><div class="head"><h2>Byte-Pixel Framebuffer</h2><small>16×16 · one RRRGGGBB byte per pixel</small><div class="grow"></div><button class="btn small" id="clearScreen">Clear</button></div><div class="screenWrap"><canvas id="screen" width="256" height="256"></canvas></div><div class="screenFoot"><span>$F000–$F0FF</span><span id="pixelOut">X 00 · Y 00 · COLOR 00</span></div></section>
+      <section class="panel terminalPanel"><div class="head"><h2>Byte Terminal</h2><small>UTF-8 host · 8-bit device stream</small><div class="grow"></div><button class="btn small" id="clearTerminal">Clear</button></div><pre class="terminal" id="terminal">BYTE//CROWN DEVICE BUS ONLINE</pre><div class="termInput"><input class="field" id="termInput" placeholder="type bytes into keyboard queue"><button class="btn" id="termSend">Send</button></div></section>
+      <section class="panel"><div class="head"><h2>Stack + Trace</h2><small id="stackMeta">top sixteen bytes</small><div class="grow"></div><button class="btn small" id="testsBtn">Self-test</button></div><div class="body"><div class="stackGrid" id="stack"></div><div class="trace" id="trace"></div></div></section>
+    </div>
+  </main>
+  <footer class="panel status"><span id="statusText"><b>BYTE LAW:</b> nothing wider enters the machine; width emerges only from cooperating bytes.</span><span class="chip aiReady" id="aiReady"><i></i><span>AI · PLAYWRIGHT READY</span></span><div class="supportActions" aria-label="Share and support BYTE//CROWN"><button class="btn small share" id="shareBtn" type="button">Share BYTE//CROWN</button><a class="btn small cash" id="supportBtn" href="https://cash.app/$unixarcade" target="_blank" rel="noopener noreferrer" aria-label="Support unixarcade on Cash App">Support $unixarcade</a></div><span id="hashOut">IMAGE FNV 811C9DC5</span></footer>
+</div>
+<dialog id="guide"><div class="modalHead"><h2>BYTE//CROWN FIELD GUIDE</h2><div class="grow"></div><button class="btn" data-close="guide">Close</button></div><div class="modalBody">
+  <p><b>BYTE//CROWN is a complete byte-native stored-program computer.</b> Every instruction cell keeps the original grammar <code>O DDDDDD A</code>. When <code>O=0</code>, the middle six bits are literal data and <code>A</code> chooses PUSH6 or LOAD6. When <code>O=1</code>, the middle six bits select one of 64 operator slots and <code>A</code> selects its paired action.</p>
+  <h3>Machine anatomy</h3><ul><li>64 KiB unified byte memory, addressed by two independent address bytes.</li><li>16 general 8-bit registers, eight 1-bit flags packed into one status byte, byte-pair PC/SP/MAR, byte IR/MDR, and a four-byte clock.</li><li>128 base operator actions, 64 extension actions, plus 128 directly executable data-plane bytes.</li><li>Memory stack, calls, interrupts, 16 vectors, conditional branches, integer and bit ALU, strings, arrays, device I/O, deterministic random source, audio, and a byte-color framebuffer.</li></ul>
+  <h3>Assembler</h3><p>Numbers accept decimal, <code>$FF</code>, <code>0xFF</code>, <code>0b1111</code>, and character literals. Registers are <code>R0</code>–<code>R15</code>, with aliases <code>A B C D E F X Y SI DI BP T0 CX TMP</code>. Memory operands use brackets. The assembler supports labels, expressions, <code>.org</code>, <code>.entry</code>, <code>.equ</code>, <code>.byte</code>, <code>.word</code>, <code>.text</code>, <code>.asciz</code>, <code>.fill</code>, <code>.align</code>, and <code>.vector</code>.</p><p>Friendly pseudo-forms such as <code>MOV R0,#42</code>, <code>MOV R0,[label]</code>, <code>MOV [label],R0</code>, <code>ADDI</code>, <code>CLR</code>, <code>TST</code>, <code>PRINT "text"</code>, <code>JE</code>, and <code>HALT</code> lower into real byte instructions. R15/TMP is the documented scratch register for immediate ALU pseudos.</p>
+  <h3>Memory map</h3><p><code>$0000–$EFFF</code> general RAM · <code>$F000–$F0FF</code> framebuffer · <code>$F100–$F10F</code> port mirror · <code>$FFE0–$FFFF</code> sixteen interrupt vectors. Reset stack begins at <code>$FFDF</code>; default code origin is <code>$0200</code>.</p>
+  <h3>Debugging</h3><p>Click a memory byte or register to move it into the Living Byte Lens. Toggle its individual bits, perform wrapped byte arithmetic, write it back, or execute it directly. The disassembler tracks instruction boundaries. Breakpoints pause before execution. The stack, flags, bus latches, terminal, screen, trace, and memory all update live.</p>
+  <h3>Playwright + AI control</h3><p>Automation can wait for <code>html[data-byte-crown-ready="true"]</code>, use stable <code>data-testid="byte-crown-*"</code> controls, or call <code>window.ByteCrownAI</code>. The API can load source and demos, assemble, start or synchronously run programs, step, pause, reset, inspect and modify registers or memory, send keyboard bytes, manage breakpoints, disassemble, snapshot, and run the proof suite. Machine state is mirrored on the root element as <code>data-byte-crown-state</code> and <code>data-byte-crown-pc</code>.</p>
+</div></dialog>
+<dialog id="testsDialog"><div class="modalHead"><h2>EXECUTABLE MACHINE PROOF</h2><div class="grow"></div><span id="testSummary"></span><button class="btn" data-close="testsDialog">Close</button></div><div class="modalBody" id="testResults"></div></dialog>
+<div class="toast" id="toast"></div>
+<script>
+(()=>{'use strict';
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const U8=n=>((Number(n)||0)%256+256)%256,U16=n=>((Number(n)||0)%65536+65536)%65536;
+const H=(n,w=2)=>(w>4?(Number(n)>>>0):U16(n)).toString(16).toUpperCase().padStart(w,'0').slice(-w),B=n=>U8(n).toString(2).padStart(8,'0');
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const parity=n=>{n=U8(n);n^=n>>4;n^=n>>2;n^=n>>1;return (~n)&1};
+const F={C:1,Z:2,N:4,V:8,P:16,I:32,D:64,T:128};
+const FLAG_NAMES=[['T',F.T,'trap'],['D',F.D,'direction'],['I',F.I,'interrupt'],['P',F.P,'parity'],['V',F.V,'overflow'],['N',F.N,'negative'],['Z',F.Z,'zero'],['C',F.C,'carry']];
+const spec=(m,sig=[],d='')=>({m,sig,d});
+const BASE=[
+ [spec('NOP',[],'No operation'),spec('HLT',[],'Halt processor')],
+ [spec('BRK',[],'Debugger break'),spec('WAIT',[],'Wait for input byte')],
+ [spec('MOV',['r','r'],'Move register'),spec('XCHG',['r','r'],'Exchange registers')],
+ [spec('LDI',['r','i'],'Load immediate byte'),spec('LEA',['r','a'],'Load address into register pair')],
+ [spec('LD',['r','a'],'Load byte from absolute memory'),spec('ST',['a','r'],'Store byte to absolute memory')],
+ [spec('LDX',['r','r'],'Load through register-pair address'),spec('STX',['r','r'],'Store through register-pair address')],
+ [spec('PUSH',['r'],'Push register byte'),spec('POP',['r'],'Pop byte into register')],
+ [spec('PUSHI',['i'],'Push immediate byte'),spec('DROP',[],'Discard top stack byte')],
+ [spec('PUSHA',[],'Push all registers'),spec('POPA',[],'Restore all registers')],
+ [spec('ADD',['r','r'],'Unsigned add'),spec('ADC',['r','r'],'Add with carry')],
+ [spec('SUB',['r','r'],'Unsigned subtract'),spec('SBB',['r','r'],'Subtract with borrow')],
+ [spec('MUL',['r','r'],'Unsigned multiply'),spec('IMUL',['r','r'],'Signed multiply')],
+ [spec('DIV',['r','r'],'Unsigned divide'),spec('IDIV',['r','r'],'Signed divide')],
+ [spec('MOD',['r','r'],'Unsigned remainder'),spec('IMOD',['r','r'],'Signed remainder')],
+ [spec('INC',['r'],'Increment byte'),spec('DEC',['r'],'Decrement byte')],
+ [spec('NEG',['r'],'Two’s-complement negate'),spec('ABS',['r'],'Signed absolute value')],
+ [spec('MIN',['r','r'],'Unsigned minimum'),spec('MAX',['r','r'],'Unsigned maximum')],
+ [spec('AND',['r','r'],'Bitwise AND'),spec('NAND',['r','r'],'Bitwise NAND')],
+ [spec('OR',['r','r'],'Bitwise OR'),spec('NOR',['r','r'],'Bitwise NOR')],
+ [spec('XOR',['r','r'],'Bitwise XOR'),spec('XNOR',['r','r'],'Bitwise XNOR')],
+ [spec('NOT',['r'],'Bitwise complement'),spec('TEST',['r','r'],'AND flags without write')],
+ [spec('SHL',['r','i'],'Logical shift left'),spec('SHR',['r','i'],'Logical shift right')],
+ [spec('SAR',['r','i'],'Arithmetic shift right'),spec('ASL',['r','i'],'Arithmetic shift left')],
+ [spec('ROL',['r','i'],'Rotate left'),spec('ROR',['r','i'],'Rotate right')],
+ [spec('RCL',['r','i'],'Rotate left through carry'),spec('RCR',['r','i'],'Rotate right through carry')],
+ [spec('CMP',['r','r'],'Compare registers'),spec('CMPI',['r','i'],'Compare immediate')],
+ [spec('SETZ',['r'],'Set if zero'),spec('SETNZ',['r'],'Set if not zero')],
+ [spec('SETC',['r'],'Set if carry'),spec('SETNC',['r'],'Set if not carry')],
+ [spec('SETS',['r'],'Set if sign'),spec('SETNS',['r'],'Set if not sign')],
+ [spec('SETO',['r'],'Set if overflow'),spec('SETNO',['r'],'Set if not overflow')],
+ [spec('SETP',['r'],'Set if parity'),spec('SETNP',['r'],'Set if not parity')],
+ [spec('BT',['r','i'],'Test bit into carry'),spec('BTS',['r','i'],'Test and set bit')],
+ [spec('BTR',['r','i'],'Test and reset bit'),spec('BTC',['r','i'],'Test and complement bit')],
+ [spec('POPCNT',['r'],'Population count'),spec('CLZ',['r'],'Count leading zeroes')],
+ [spec('CTZ',['r'],'Count trailing zeroes'),spec('BITREV',['r'],'Reverse all bits')],
+ [spec('NSWAP',['r'],'Swap high and low nibbles'),spec('PACK',['r','r'],'Pack low nibbles')],
+ [spec('JMP',['a'],'Absolute jump'),spec('CALL',['a'],'Call absolute address')],
+ [spec('RET',[],'Return from call'),spec('RTI',[],'Return from interrupt')],
+ [spec('JZ',['a'],'Jump if zero'),spec('JNZ',['a'],'Jump if not zero')],
+ [spec('JC',['a'],'Jump if carry'),spec('JNC',['a'],'Jump if not carry')],
+ [spec('JS',['a'],'Jump if sign'),spec('JNS',['a'],'Jump if not sign')],
+ [spec('JO',['a'],'Jump if overflow'),spec('JNO',['a'],'Jump if not overflow')],
+ [spec('JP',['a'],'Jump if parity'),spec('JNP',['a'],'Jump if not parity')],
+ [spec('JA',['a'],'Jump unsigned above'),spec('JAE',['a'],'Jump unsigned above/equal')],
+ [spec('JB',['a'],'Jump unsigned below'),spec('JBE',['a'],'Jump unsigned below/equal')],
+ [spec('JG',['a'],'Jump signed greater'),spec('JGE',['a'],'Jump signed greater/equal')],
+ [spec('JL',['a'],'Jump signed less'),spec('JLE',['a'],'Jump signed less/equal')],
+ [spec('LOOP',['a'],'Decrement CX and jump'),spec('DJNZ',['r','a'],'Decrement register and jump')],
+ [spec('INT',['i'],'Software interrupt'),spec('SYSCALL',['i'],'Host service call')],
+ [spec('CLI',[],'Disable interrupts'),spec('STI',[],'Enable interrupts')],
+ [spec('CLC',[],'Clear carry'),spec('STC',[],'Set carry')],
+ [spec('CLD',[],'Increment string pointers'),spec('STD',[],'Decrement string pointers')],
+ [spec('MOVS',[],'Move one SI→DI byte'),spec('CMPS',[],'Compare one SI/DI byte')],
+ [spec('LODS',[],'Load A from SI'),spec('STOS',[],'Store A to DI')],
+ [spec('SCAS',[],'Compare A with DI byte'),spec('FILL',[],'Fill CX bytes at DI with A')],
+ [spec('MEMCPY',[],'Copy CX bytes SI→DI'),spec('MEMSET',[],'Set CX bytes at DI from A')],
+ [spec('IN',['r','p'],'Read byte from port'),spec('OUT',['p','r'],'Write byte to port')],
+ [spec('RAND',['r'],'Deterministic random byte'),spec('TIME',['r'],'Read low clock byte')],
+ [spec('SLEEP',['i'],'Yield for host quanta'),spec('TONE',['r','r'],'Play byte-defined tone')],
+ [spec('PIXEL',['r','r','r'],'Write framebuffer pixel'),spec('CLS',['r'],'Clear framebuffer to byte color')],
+ [spec('VADD',['r'],'Add register across SI/CX array'),spec('VSUB',['r'],'Subtract across SI/CX array')],
+ [spec('VMUL',['r'],'Multiply SI/CX array'),spec('VDIV',['r'],'Divide SI/CX array')],
+ [spec('VAND',['r'],'AND SI/CX array'),spec('VOR',['r'],'OR SI/CX array')],
+ [spec('VXOR',['r'],'XOR SI/CX array'),spec('EXT',[],'Extension-plane gateway')]
+];
+const EXT=[
+ spec('PUSHF',[],'Push status byte'),spec('POPF',[],'Restore status byte'),spec('GETSP',['r','r'],'Copy SP high/low'),spec('SETSP',['r','r'],'Set SP high/low'),
+ spec('GETPC',['r','r'],'Copy PC high/low'),spec('SETPC',['r','r'],'Set PC high/low'),spec('SATADD',['r','r'],'Unsigned saturating add'),spec('SATSUB',['r','r'],'Unsigned saturating subtract'),
+ spec('QADD',['r','r'],'Signed saturating add'),spec('QSUB',['r','r'],'Signed saturating subtract'),spec('AVG',['r','r'],'Rounded unsigned average'),spec('ABSDIFF',['r','r'],'Absolute byte difference'),
+ spec('GCD',['r','r'],'Greatest common divisor'),spec('POW',['r','r'],'Modular byte power'),spec('SQRT',['r'],'Integer square root'),spec('LOG2',['r'],'Integer base-2 logarithm'),
+ spec('MULHI',['r','r'],'High byte of product'),spec('DIVREM',['r','r'],'Quotient in dst, remainder in TMP'),spec('CLAMP',['r','i','i'],'Clamp byte between bounds'),spec('SIGN',['r'],'Map signed byte to FF/00/01'),
+ spec('SELECT',['r','r','r'],'Select true/false register by Z'),spec('CMOVG',['r','r'],'Conditional move if signed greater'),spec('CMOVL',['r','r'],'Conditional move if signed less'),spec('CAS',['a','r','r'],'Compare-and-swap memory byte'),
+ spec('XADD',['r','r'],'Exchange then add'),spec('SWAPM',['a','a'],'Exchange memory bytes'),spec('FENCE',[],'Ordering fence and trace point'),spec('GRAY',['r'],'Binary to reflected Gray code'),
+ spec('UNGRAY',['r'],'Gray code to binary'),spec('LFSR',['r'],'Advance maximal byte LFSR'),spec('CRC8',['r'],'CRC-8 of register byte'),spec('FNV8',['r'],'FNV-style byte avalanche'),
+ spec('BCDADD',['r','r'],'Packed-BCD add'),spec('BCDSUB',['r','r'],'Packed-BCD subtract'),spec('DAA',['r'],'Decimal adjust after add'),spec('MORTON',['r','r'],'Interleave low nibbles'),
+ spec('DEMORTON',['r','r'],'Split interleaved bits'),spec('SINE8',['r'],'Byte phase sine wave'),spec('COSINE8',['r'],'Byte phase cosine wave'),spec('NOISE8',['r'],'Coordinate hash noise'),
+ spec('VMIN',['r'],'Vector unsigned minimum'),spec('VMAX',['r'],'Vector unsigned maximum'),spec('VNEG',[],'Vector two’s-complement negate'),spec('VABS',[],'Vector signed absolute'),
+ spec('VCMP',['r'],'Compare every element to register'),spec('VFILL',['r'],'Fill SI/CX vector'),spec('VCOPY',[],'Copy SI/CX vector to DI'),spec('VCRC',['r'],'CRC-8 across vector'),
+ spec('ASSERT',['r'],'Trap unless register is nonzero'),spec('TRACE',['r'],'Emit register to trace port'),spec('BREAKPOINT',[],'Explicit debugger breakpoint'),spec('RESET',[],'Reset CPU while preserving memory'),
+ spec('SEED',['r'],'Seed deterministic random source'),spec('PUSHPC',[],'Push current PC pair'),spec('POPPC',[],'Pop PC pair'),spec('ENTER',['i'],'Create byte stack frame'),
+ spec('LEAVE',[],'Destroy byte stack frame'),spec('MEMCMP',[],'Compare CX bytes at SI/DI'),spec('SEARCH',['r'],'Search SI/CX for byte'),spec('VREVERSE',[],'Reverse SI/CX vector'),
+ spec('VSORT',[],'Sort SI/CX vector ascending'),spec('VROL',['i'],'Rotate every vector byte left'),spec('VROR',['i'],'Rotate every vector byte right'),spec('MAGIC',['i'],'Device-defined byte service')
+];
+const OP=Object.create(null),EX=Object.create(null);
+BASE.forEach((pair,d)=>pair.forEach((s,a)=>OP[s.m]={...s,opcode:0x80|(d<<1)|a,slot:d,action:a}));EXT.forEach((s,i)=>EX[s.m]={...s,sub:i,opcode:0xFF});
+const REG_ALIAS={A:0,B:1,C:2,D:3,E:4,F:5,X:6,Y:7,SI:8,SIH:8,SIL:9,DI:10,DIH:10,DIL:11,BP:12,T0:13,CX:14,TMP:15};
+const REG_LABEL=['A','B','C','D','E','F','X','Y','SIH','SIL','DIH','DIL','BP','T0','CX','TMP'];
+const fmtBytes=s=>s.map(x=>H(x)).join(' '),sigWidth=t=>t==='a'?2:1;
+
+function stripComment(line){let q='',out='';for(let i=0;i<line.length;i++){const c=line[i],n=line[i+1];if(q){out+=c;if(c==='\\'){out+=line[++i]||'';continue}if(c===q)q='';continue}if(c==='"'||c==="'"){q=c;out+=c;continue}if(c===';'||(c==='/'&&n==='/'))break;out+=c}return out.trim()}
+function splitArgs(s){const out=[];let q='',depth=0,start=0;for(let i=0;i<s.length;i++){const c=s[i];if(q){if(c==='\\')i++;else if(c===q)q='';continue}if(c==='"'||c==="'"){q=c;continue}if(c==='['||c==='(')depth++;if(c===']'||c===')')depth--;if(c===','&&!depth){out.push(s.slice(start,i).trim());start=i+1}}const tail=s.slice(start).trim();if(tail)out.push(tail);return out}
+function decodeString(raw){raw=raw.trim();if(!/^"[\s\S]*"$/.test(raw))throw Error('expected quoted string');const s=raw.slice(1,-1),out=[];for(let i=0;i<s.length;i++){let c=s[i];if(c==='\\'){const n=s[++i];if(n==='n')c='\n';else if(n==='r')c='\r';else if(n==='t')c='\t';else if(n==='0')c='\0';else if(n==='x'){const h=s.slice(i+1,i+3);if(!/^[0-9a-f]{2}$/i.test(h))throw Error('bad \\x escape');c=String.fromCharCode(parseInt(h,16));i+=2}else c=n||''}const bytes=new TextEncoder().encode(c);out.push(...bytes)}return out}
+function tokenizeExpr(src){const t=[];let i=0;while(i<src.length){let c=src[i];if(/\s/.test(c)){i++;continue}if(c==="'"){let j=i+1,v;if(src[j]==='\\'){const e=src[j+1];v=e==='n'?10:e==='r'?13:e==='t'?9:(e||'').charCodeAt(0);j+=2}else{v=src[j]?.charCodeAt(0);j++}if(src[j]!=="'")throw Error('bad character literal');t.push({k:'n',v:v||0});i=j+1;continue}let m=src.slice(i).match(/^(?:0x[0-9a-f]+|0b[01]+|\$[0-9a-f]+|%[01]+|\d+)/i);if(m){const z=m[0];t.push({k:'n',v:z[0]==='$'?parseInt(z.slice(1),16):z[0]==='%'?parseInt(z.slice(1),2):Number(z)});i+=z.length;continue}m=src.slice(i).match(/^[A-Za-z_.][A-Za-z0-9_.]*/);if(m){t.push({k:'id',v:m[0].toUpperCase()});i+=m[0].length;continue}const two=src.slice(i,i+2);if(two==='<<'||two==='>>'){t.push({k:'op',v:two});i+=2;continue}if('()+-*/%&|^~'.includes(c)){t.push({k:c==='('? 'lp':c===')'?'rp':'op',v:c});i++;continue}throw Error(`bad expression token “${c}”`)}return t}
+function evalExpr(src,symbols={},loose=false){src=String(src).trim().replace(/^#/,'').replace(/^\[|\]$/g,'');const t=tokenizeExpr(src);let p=0;const bp={'|':1,'^':2,'&':3,'<<':4,'>>':4,'+':5,'-':5,'*':6,'/':6,'%':6};function atom(){const x=t[p++];if(!x)throw Error('incomplete expression');if(x.k==='n')return x.v;if(x.k==='id'){if((x.v==='LOW'||x.v==='LO'||x.v==='HIGH'||x.v==='HI')&&t[p]?.k==='lp'){p++;const v=parse(0);if(t[p++]?.k!=='rp')throw Error('missing )');return x.v[0]==='L'?v&255:(v>>8)&255}if(Object.prototype.hasOwnProperty.call(symbols,x.v))return symbols[x.v];if(loose)return 0;throw Error(`unknown symbol ${x.v}`)}if(x.k==='lp'){const v=parse(0);if(t[p++]?.k!=='rp')throw Error('missing )');return v}if(x.k==='op'&&['+','-','~'].includes(x.v)){const v=atom();return x.v==='-'?-v:x.v==='~'?~v:v}throw Error('expected expression value')}function parse(min){let a=atom();while(t[p]?.k==='op'&&(bp[t[p].v]||0)>min){const op=t[p++].v,b=parse(bp[op]);if(op==='+')a+=b;else if(op==='-')a-=b;else if(op==='*')a*=b;else if(op==='/')a=b?Math.trunc(a/b):0;else if(op==='%')a=b?a%b:0;else if(op==='<<')a<<=b;else if(op==='>>')a>>=b;else if(op==='&')a&=b;else if(op==='^')a^=b;else if(op==='|')a|=b}return a}const v=parse(0);if(p<t.length)throw Error('trailing expression');return v}
+function parseReg(s){const k=String(s).trim().toUpperCase();if(/^R(?:1[0-5]|\d)$/.test(k))return +k.slice(1);if(k in REG_ALIAS)return REG_ALIAS[k];throw Error(`bad register ${s}`)}
+function isReg(s){try{parseReg(s);return true}catch{return false}}
+function instructionSize(s,ext=false){return 1+(ext?1:0)+s.sig.reduce((n,x)=>n+sigWidth(x),0)}
+function normalizeMnemonic(m){const aliases={HALT:'HLT',JE:'JZ',JNE:'JNZ',JNA:'JBE',JNAE:'JB',JNB:'JAE',JNBE:'JA',JNG:'JLE',JNGE:'JL',JNL:'JGE',JNLE:'JG',JPE:'JP',JPO:'JNP',BRA:'JMP',RETURN:'RET',IRET:'RTI',SYS:'SYSCALL',LOAD:'LD',STORE:'ST',SAL:'ASL'};return aliases[m]||m}
+function normalizeInstruction(m,ops){m=normalizeMnemonic(m.toUpperCase());if(m==='MOV'&&ops.length===2){if(/^\[/.test(ops[0]))return[{m:'ST',ops:[ops[0],ops[1]]}];if(/^\[/.test(ops[1]))return[{m:'LD',ops:[ops[0],ops[1]]}];if(!isReg(ops[1]))return[{m:'LDI',ops}]}
+ if(m==='CMP'&&ops.length===2&&!isReg(ops[1]))return[{m:'CMPI',ops}];if(m==='PUSH'&&ops.length===1&&!isReg(ops[0]))return[{m:'PUSHI',ops}];if(m==='CLR')return[{m:'LDI',ops:[ops[0],'0']}];if(m==='TST')return[{m:'TEST',ops:[ops[0],ops[0]]}];if(m==='MOV16')return[{m:'LEA',ops}];
+ const imm={ADDI:'ADD',SUBI:'SUB',MULI:'MUL',DIVI:'DIV',MODI:'MOD',ANDI:'AND',ORI:'OR',XORI:'XOR',MINI:'MIN',MAXI:'MAX'};if(m in imm)return[{m:'LDI',ops:['TMP',ops[1]]},{m:imm[m],ops:[ops[0],'TMP']}];
+ if(m==='PRINT'){const bytes=decodeString(ops.join(','));return bytes.flatMap(v=>[{m:'LDI',ops:['A',String(v)]},{m:'OUT',ops:['1','A']}])}
+ if(m==='PUSH6'||m==='LIT6'||m==='DATA')return[{raw:'push6',expr:ops[0]}];if(m==='LOAD6'||m==='LDA6')return[{raw:'load6',expr:ops[0]}];return[{m,ops}]}
+function encodeArgs(s,ops,symbols){if(ops.length!==s.sig.length)throw Error(`${s.m} expects ${s.sig.length} operand${s.sig.length===1?'':'s'}`);const out=[];s.sig.forEach((type,i)=>{const raw=ops[i];if(type==='r')out.push(parseReg(raw));else if(type==='a'){const v=U16(evalExpr(raw,symbols));out.push(v>>8,v&255)}else{const v=evalExpr(raw,symbols);if(type==='p'&&(v<0||v>255))throw Error('port must be a byte');out.push(U8(v))}});return out}
+function parseLines(source){const out=[];source.split(/\r?\n/).forEach((raw,i)=>{let s=stripComment(raw),labels=[];while(s){const m=s.match(/^([A-Za-z_.][\w.]*)\s*:\s*/);if(!m)break;labels.push(m[1].toUpperCase());s=s.slice(m[0].length).trim()}out.push({raw,line:i+1,s,labels})});return out}
+function directiveInfo(s){const m=s.match(/^([.]?[A-Za-z][A-Za-z0-9_]*)\b\s*(.*)$/);if(!m)return{name:'',rest:s};return{name:m[1].toUpperCase().replace(/^\./,''),rest:m[2].trim()}}
+function assembleSource(source){const lines=parseLines(source),symbols=Object.create(null),consts=Object.create(null),errors=[],warnings=[];let pc=0x0200,first=null,entryExpr=null;const plan=[];function err(x,msg){errors.push({line:x.line,msg})}function symtab(){return Object.assign(Object.create(null),symbols,consts)}
+ for(const x of lines){x.labels.forEach(l=>{if(l in symbols||l in consts)err(x,`duplicate symbol ${l}`);else symbols[l]=pc});if(!x.s){plan.push({...x,kind:'empty',pc,size:0});continue}const d=directiveInfo(x.s);try{
+   if(d.name==='EQU'||/\s+EQU\s+/i.test(x.s)){let name,expr;if(d.name==='EQU'){const a=splitArgs(d.rest);name=a.shift();expr=a.join(',')}else{const m=x.s.match(/^(\w+)\s+EQU\s+(.+)$/i);name=m[1];expr=m[2]}name=name.toUpperCase();consts[name]=evalExpr(expr,symtab(),true);plan.push({...x,kind:'equ',pc,size:0});continue}
+   if(d.name==='ORG'){pc=U16(evalExpr(d.rest,symtab(),true));plan.push({...x,kind:'org',pc,size:0,rest:d.rest});continue}
+   if(d.name==='ENTRY'){entryExpr=d.rest;plan.push({...x,kind:'entry',pc,size:0,rest:d.rest});continue}
+   if(d.name==='VECTOR'){plan.push({...x,kind:'vector',pc,size:0,args:splitArgs(d.rest)});continue}
+   if(['BYTE','DB','WORD','DW','TEXT','ASCII','ASCIZ','FILL','ALIGN'].includes(d.name)){let size=0,args=splitArgs(d.rest);if(d.name==='BYTE'||d.name==='DB')for(const a of args)size+=a.trim().startsWith('"')?decodeString(a).length:1;else if(d.name==='WORD'||d.name==='DW')size=args.length*2;else if(d.name==='TEXT'||d.name==='ASCII'||d.name==='ASCIZ')size=decodeString(d.rest).length+(d.name==='ASCIZ');else if(d.name==='FILL')size=U16(evalExpr(args[0],symtab(),true));else{const n=Math.max(1,evalExpr(args[0],symtab(),true));size=(n-(pc%n))%n}plan.push({...x,kind:'directive',name:d.name,args,rest:d.rest,pc,size});if(size&&!first)first=pc;pc=U16(pc+size);continue}
+   const im=x.s.match(/^([^\s]+)\s*(.*)$/),m=im[1].toUpperCase(),ops=splitArgs(im[2]),parts=normalizeInstruction(m,ops);let size=0;for(const q of parts){if(q.raw)size++;else{const s=OP[q.m]||EX[q.m];if(!s)throw Error(`unknown operation ${q.m}`);size+=instructionSize(s,!!EX[q.m])}}plan.push({...x,kind:'instruction',pc,size,parts});if(size&&!first)first=pc;pc=U16(pc+size)
+ }catch(e){err(x,e.message);plan.push({...x,kind:'error',pc,size:0})}}
+ if(errors.length)return{ok:false,errors,warnings,symbols,consts,plan};const table=symtab(),memory=new Map(),listing=[],used=new Set();function put(at,v,x){at=U16(at);if(used.has(at))warnings.push({line:x.line,msg:`address $${H(at,4)} overwritten`});used.add(at);memory.set(at,U8(v))}
+ for(const x of plan){try{const at=x.pc;let bytes=[];if(x.kind==='directive'){if(x.name==='BYTE'||x.name==='DB'){for(const a of x.args){if(a.trim().startsWith('"'))bytes.push(...decodeString(a));else bytes.push(U8(evalExpr(a,table)))}}else if(x.name==='WORD'||x.name==='DW'){for(const a of x.args){const v=U16(evalExpr(a,table));bytes.push(v>>8,v&255)}}else if(x.name==='TEXT'||x.name==='ASCII'||x.name==='ASCIZ'){bytes.push(...decodeString(x.rest));if(x.name==='ASCIZ')bytes.push(0)}else if(x.name==='FILL'){const n=U16(evalExpr(x.args[0],table)),v=U8(evalExpr(x.args[1]||'0',table));bytes=Array(n).fill(v)}else bytes=Array(x.size).fill(0)}else if(x.kind==='instruction'){for(const q of x.parts){if(q.raw){const v=evalExpr(q.expr,table);if(v<0||v>63)throw Error(`${q.raw} payload must be 0..63`);bytes.push((v<<1)|(q.raw==='load6'?1:0));continue}const s=OP[q.m]||EX[q.m];if(EX[q.m])bytes.push(0xFF,s.sub,...encodeArgs(s,q.ops,table));else bytes.push(s.opcode,...encodeArgs(s,q.ops,table))}}
+   bytes.forEach((b,i)=>put(at+i,b,x));if(bytes.length)listing.push({addr:at,bytes,source:x.raw,line:x.line})
+  }catch(e){err(x,e.message)}}
+ for(const x of plan.filter(q=>q.kind==='vector'))try{if(x.args.length!==2)throw Error('.vector expects number,label');const n=evalExpr(x.args[0],table)&15,v=U16(evalExpr(x.args[1],table)),at=0xFFE0+n*2;put(at,v>>8,x);put(at+1,v&255,x);listing.push({addr:at,bytes:[v>>8,v&255],source:x.raw,line:x.line})}catch(e){err(x,e.message)}
+ let entry=first??0x0200;try{if(entryExpr)entry=U16(evalExpr(entryExpr,table));else if('START'in table)entry=U16(table.START)}catch(e){errors.push({line:0,msg:e.message})}const addresses=[...memory.keys()].sort((a,b)=>a-b);return{ok:!errors.length,errors,warnings,symbols:table,memory,listing,entry,min:addresses[0]??entry,max:addresses.at(-1)??entry,bytes:memory.size}}
+
+class ByteCPU{
+ constructor(devices){this.mem=new Uint8Array(65536);this.r=new Uint8Array(16);this.clock=new Uint8Array(4);this.rng=new Uint8Array([0x13,0x37,0xC0,0xDE]);this.dev=devices;this.trace=[];this.reset(false)}
+ reset(clear=false){if(clear)this.mem.fill(0);this.r.fill(0);this.pch=2;this.pcl=0;this.sph=0xFF;this.spl=0xDF;this.flags=F.I;this.ir=this.mdr=this.marh=this.marl=0;this.halted=this.waiting=this.breakRequested=false;this.fault='';this.sleepUntil=0;this.clock.fill(0);this.trace.length=0}
+ get pc(){return(this.pch<<8)|this.pcl}set pc(v){v=U16(v);this.pch=v>>8;this.pcl=v&255}get sp(){return(this.sph<<8)|this.spl}set sp(v){v=U16(v);this.sph=v>>8;this.spl=v&255}
+ read8(a){a=U16(a);this.marh=a>>8;this.marl=a&255;const v=(a>=0xF100&&a<0xF110)?this.dev.input(a&15,this):this.mem[a];this.mdr=U8(v);return this.mdr}
+ write8(a,v){a=U16(a);v=U8(v);this.marh=a>>8;this.marl=a&255;const old=this.mem[a];this.mem[a]=v;this.mdr=v;if(a>=0xF000&&a<0xF100)this.dev.screenDirty=true;if(a>=0xF100&&a<0xF110)this.dev.output(a&15,v,this);this.dev.memoryWrite?.(a,old,v,this)}
+ fetch(){const a=this.pc,v=this.read8(a);this.pc=a+1;this._operands.push(v);this._reads++;return v}fetchAddr(){return(this.fetch()<<8)|this.fetch()}pair(i){i&=15;return(this.r[i]<<8)|this.r[(i+1)&15]}setPair(i,v){i&=15;v=U16(v);this.r[i]=v>>8;this.r[(i+1)&15]=v&255}
+ push(v){this.write8(this.sp,v);this.sp=this.sp-1}pop(){this.sp=this.sp+1;return this.read8(this.sp)}push16(v){this.push(v>>8);this.push(v)}pop16(){const lo=this.pop(),hi=this.pop();return(hi<<8)|lo}
+ flag(mask,on){this.flags=on?this.flags|mask:this.flags&~mask}has(mask){return!!(this.flags&mask)}zn(v){v=U8(v);this.flag(F.Z,v===0);this.flag(F.N,!!(v&128));this.flag(F.P,parity(v));return v}
+ add(a,b,c=0){const q=a+b+c,r=U8(q);this.flag(F.C,q>255);this.flag(F.V,!!((~(a^b)&(a^r)&128)));return this.zn(r)}
+ sub(a,b,c=0){const q=a-b-c,r=U8(q);this.flag(F.C,q<0);this.flag(F.V,!!(((a^b)&(a^r)&128)));return this.zn(r)}
+ signed(v){return v&128?v-256:v}faultAt(msg){this.fault=msg;this.halted=true;this.dev.fault?.(msg,this)}
+ tick(n=1){for(let k=0;k<n;k++)for(let i=0;i<4;i++){this.clock[i]=(this.clock[i]+1)&255;if(this.clock[i])break}}
+ random(){let x=this.rng[0]|this.rng[1]<<8|this.rng[2]<<16|this.rng[3]<<24;x^=x<<13;x^=x>>>17;x^=x<<5;x>>>=0;for(let i=0;i<4;i++)this.rng[i]=(x>>>(i*8))&255;return x&255}
+ adjustPair(i){this.setPair(i,this.pair(i)+(this.has(F.D)?-1:1))}
+ branch(cond,a){if(cond)this.pc=a}
+ syscall(n){switch(n&255){case 0:this.dev.output(1,this.r[0],this);break;case 1:this.dev.output(2,this.r[0],this);break;case 2:this.r[0]=this.random();this.zn(this.r[0]);break;case 3:this.dev.clearTerminal?.();break;case 4:this.write8(0xF000+((this.r[1]&15)<<4)+(this.r[0]&15),this.r[2]);break;case 5:this.dev.tone?.(20+this.r[0]*8,Math.max(20,this.r[1]*8));break;case 6:this.halted=true;break;case 7:this.dev.text?.('\n');break;default:this.dev.magic?.(n,this)}}
+ interrupt(n){const base=0xFFE0+((n&15)<<1),target=(this.mem[base]<<8)|this.mem[base+1];if(!target){this.faultAt(`empty interrupt vector ${n&15}`);return}this.push(this.flags);this.push(this.pch);this.push(this.pcl);this.flag(F.I,false);this.pc=target}
+ bitShift(slot,a){const r=this.fetch()&15,n=this.fetch()&7,v=this.r[r];let q=v,c=0;if(slot===21&&!a){c=n?(v>>>(8-n))&1:this.has(F.C);q=v<<n}else if(slot===21){c=n?(v>>>(n-1))&1:this.has(F.C);q=v>>>n}else if(slot===22&&!a){c=n?(v>>>(n-1))&1:this.has(F.C);q=this.signed(v)>>n}else if(slot===22){c=n?(v>>>(8-n))&1:this.has(F.C);q=v<<n}else if(slot===23&&!a){q=n?((v<<n)|(v>>>(8-n))):v;c=q&1}else if(slot===23){q=n?((v>>>n)|(v<<(8-n))):v;c=(q>>7)&1}else{let z=a?(this.has(F.C)?0x100:0)|v:v|(this.has(F.C)?0x100:0);for(let i=0;i<n;i++)if(!a){const top=(z>>8)&1;z=((z<<1)&0x1ff)|top}else{const lo=z&1;z=(z>>>1)|(lo<<8)}q=z&255;c=(z>>8)&1}this.flag(F.C,c);this.r[r]=this.zn(q);this.flag(F.V,!!(((this.r[r]>>7)&1)^c))}
+ vector(fn){const p=this.pair(8),n=this.r[14];for(let i=0;i<n;i++){const a=U16(p+(this.has(F.D)?-i:i)),old=this.read8(a);this.write8(a,fn(old,i))}}
+ executeBase(slot,a){let x,y,z,v,q,addr,cond;switch(slot){
+ case 0:if(a)this.halted=true;break;case 1:if(a)this.waiting=true;else this.breakRequested=true;break;
+ case 2:x=this.fetch()&15;y=this.fetch()&15;if(a){v=this.r[x];this.r[x]=this.r[y];this.r[y]=v}else this.r[x]=this.r[y];break;
+ case 3:x=this.fetch()&15;if(a)this.setPair(x,this.fetchAddr());else{this.r[x]=this.fetch();this.zn(this.r[x])}break;
+ case 4:if(a){addr=this.fetchAddr();x=this.fetch()&15;this.write8(addr,this.r[x])}else{x=this.fetch()&15;this.r[x]=this.zn(this.read8(this.fetchAddr()))}break;
+ case 5:x=this.fetch()&15;y=this.fetch()&15;if(a)this.write8(this.pair(x),this.r[y]);else this.r[x]=this.zn(this.read8(this.pair(y)));break;
+ case 6:x=this.fetch()&15;if(a)this.r[x]=this.zn(this.pop());else this.push(this.r[x]);break;case 7:if(a)this.pop();else this.push(this.fetch());break;
+ case 8:if(a)for(let i=15;i>=0;i--)this.r[i]=this.pop();else for(let i=0;i<16;i++)this.push(this.r[i]);break;
+ case 9:x=this.fetch()&15;y=this.fetch()&15;this.r[x]=this.add(this.r[x],this.r[y],a&&this.has(F.C)?1:0);break;
+ case 10:x=this.fetch()&15;y=this.fetch()&15;this.r[x]=this.sub(this.r[x],this.r[y],a&&this.has(F.C)?1:0);break;
+ case 11:x=this.fetch()&15;y=this.fetch()&15;q=a?this.signed(this.r[x])*this.signed(this.r[y]):this.r[x]*this.r[y];this.flag(F.C,q>255||q<0);this.flag(F.V,this.has(F.C));this.r[x]=this.zn(q);break;
+ case 12:x=this.fetch()&15;y=this.fetch()&15;if(!this.r[y])return this.faultAt('division by zero');q=a?Math.trunc(this.signed(this.r[x])/this.signed(this.r[y])):Math.trunc(this.r[x]/this.r[y]);this.r[x]=this.zn(q);this.flag(F.C,false);this.flag(F.V,false);break;
+ case 13:x=this.fetch()&15;y=this.fetch()&15;if(!this.r[y])return this.faultAt('remainder by zero');q=a?this.signed(this.r[x])%this.signed(this.r[y]):this.r[x]%this.r[y];this.r[x]=this.zn(q);break;
+ case 14:x=this.fetch()&15;this.r[x]=a?this.sub(this.r[x],1):this.add(this.r[x],1);break;case 15:x=this.fetch()&15;q=a?Math.abs(this.signed(this.r[x])):-this.r[x];this.r[x]=this.zn(q);this.flag(F.V,q>127);break;
+ case 16:x=this.fetch()&15;y=this.fetch()&15;this.r[x]=this.zn(a?Math.max(this.r[x],this.r[y]):Math.min(this.r[x],this.r[y]));break;
+ case 17:case 18:case 19:x=this.fetch()&15;y=this.fetch()&15;if(slot===17)q=this.r[x]&this.r[y];if(slot===18)q=this.r[x]|this.r[y];if(slot===19)q=this.r[x]^this.r[y];if(a)q=~q;this.r[x]=this.zn(q);this.flag(F.C,false);this.flag(F.V,false);break;
+ case 20:x=this.fetch()&15;if(a){y=this.fetch()&15;this.zn(this.r[x]&this.r[y]);this.flag(F.C,false);this.flag(F.V,false)}else this.r[x]=this.zn(~this.r[x]);break;
+ case 21:case 22:case 23:case 24:this.bitShift(slot,a);break;
+ case 25:x=this.fetch()&15;if(a)y=this.fetch();else y=this.r[this.fetch()&15];this.sub(this.r[x],y);break;
+ case 26:case 27:case 28:case 29:case 30:x=this.fetch()&15;cond=slot===26?this.has(F.Z):slot===27?this.has(F.C):slot===28?this.has(F.N):slot===29?this.has(F.V):this.has(F.P);this.r[x]=(a?!cond:cond)?1:0;break;
+ case 31:x=this.fetch()&15;y=this.fetch()&7;this.flag(F.C,(this.r[x]>>y)&1);if(a)this.r[x]|=1<<y;break;case 32:x=this.fetch()&15;y=this.fetch()&7;this.flag(F.C,(this.r[x]>>y)&1);if(a)this.r[x]^=1<<y;else this.r[x]&=~(1<<y);break;
+ case 33:x=this.fetch()&15;v=this.r[x];if(a){q=0;for(let i=7;i>=0&&!(v&(1<<i));i--)q++}else{q=0;for(let i=0;i<8;i++)q+=(v>>i)&1}this.r[x]=this.zn(q);break;
+ case 34:x=this.fetch()&15;v=this.r[x];if(a){q=0;for(let i=0;i<8;i++)q|=((v>>i)&1)<<(7-i)}else{q=0;while(q<8&&!(v&(1<<q)))q++}this.r[x]=this.zn(q);break;
+ case 35:x=this.fetch()&15;if(a){y=this.fetch()&15;this.r[x]=this.zn((this.r[x]&0xF0)|(this.r[y]&15))}else this.r[x]=this.zn((this.r[x]<<4)|(this.r[x]>>4));break;
+ case 36:addr=this.fetchAddr();if(a){this.push16(this.pc);this.pc=addr}else this.pc=addr;break;case 37:if(a){this.pcl=this.pop();this.pch=this.pop();this.flags=this.pop()}else this.pc=this.pop16();break;
+ case 38:case 39:case 40:case 41:case 42:addr=this.fetchAddr();cond=slot===38?this.has(F.Z):slot===39?this.has(F.C):slot===40?this.has(F.N):slot===41?this.has(F.V):this.has(F.P);this.branch(a?!cond:cond,addr);break;
+ case 43:addr=this.fetchAddr();cond=!this.has(F.C)&&!this.has(F.Z);this.branch(a?!this.has(F.C):cond,addr);break;case 44:addr=this.fetchAddr();cond=this.has(F.C);this.branch(a?cond||this.has(F.Z):cond,addr);break;
+ case 45:addr=this.fetchAddr();cond=!this.has(F.Z)&&(this.has(F.N)===this.has(F.V));this.branch(a?this.has(F.N)===this.has(F.V):cond,addr);break;case 46:addr=this.fetchAddr();cond=this.has(F.N)!==this.has(F.V);this.branch(a?cond||this.has(F.Z):cond,addr);break;
+ case 47:if(a){x=this.fetch()&15;addr=this.fetchAddr();this.r[x]=U8(this.r[x]-1);this.branch(this.r[x]!==0,addr)}else{addr=this.fetchAddr();this.r[14]=U8(this.r[14]-1);this.branch(this.r[14]!==0,addr)}break;
+ case 48:v=this.fetch();if(a)this.syscall(v);else this.interrupt(v);break;case 49:this.flag(F.I,!!a);break;case 50:this.flag(F.C,!!a);break;case 51:this.flag(F.D,!!a);break;
+ case 52:x=this.pair(8);y=this.pair(10);v=this.read8(x);q=this.read8(y);if(a)this.sub(v,q);else this.write8(y,v);this.adjustPair(8);this.adjustPair(10);break;
+ case 53:if(a){this.write8(this.pair(10),this.r[0]);this.adjustPair(10)}else{this.r[0]=this.zn(this.read8(this.pair(8)));this.adjustPair(8)}break;
+ case 54:if(a){let n=this.r[14];while(n--){this.write8(this.pair(10),this.r[0]);this.adjustPair(10)}this.r[14]=0}else{this.sub(this.r[0],this.read8(this.pair(10)));this.adjustPair(10)}break;
+ case 55:if(a){let n=this.r[14];while(n--){this.write8(this.pair(10),this.r[0]);this.adjustPair(10)}}else{let n=this.r[14];while(n--){this.write8(this.pair(10),this.read8(this.pair(8)));this.adjustPair(8);this.adjustPair(10)}}this.r[14]=0;break;
+ case 56:if(a){v=this.fetch();x=this.fetch()&15;this.dev.output(v,this.r[x],this)}else{x=this.fetch()&15;v=this.fetch();this.r[x]=this.zn(this.dev.input(v,this))}break;
+ case 57:x=this.fetch()&15;this.r[x]=this.zn(a?this.clock[0]:this.random());break;case 58:if(a){x=this.fetch()&15;y=this.fetch()&15;this.dev.tone?.(20+this.r[x]*8,Math.max(20,this.r[y]*8))}else this.sleepUntil=performance.now()+this.fetch()*4;break;
+ case 59:if(a){x=this.fetch()&15;this.mem.fill(this.r[x],0xF000,0xF100);this.dev.screenDirty=true}else{x=this.fetch()&15;y=this.fetch()&15;z=this.fetch()&15;addr=0xF000+((this.r[y]&15)<<4)+(this.r[x]&15);this.write8(addr,this.r[z])}break;
+ case 60:case 61:case 62:case 63:x=this.fetch()&15;v=this.r[x];if(slot===60)this.vector(n=>a?n-v:n+v);else if(slot===61){if(a&&!v)return this.faultAt('vector division by zero');this.vector(n=>a?Math.trunc(n/v):n*v)}else if(slot===62)this.vector(n=>a?n|v:n&v);else this.vector(n=>n^v);break;
+ default:this.faultAt(`invalid operator slot ${slot}`)}}
+
+ executeExt(sub){const s=EXT[sub];if(!s)return this.faultAt(`invalid extension ${sub}`);let x,y,z,v,q,a,b,n,p,arr;switch(sub){
+ case 0:this.push(this.flags);break;case 1:this.flags=this.pop();break;case 2:x=this.fetch()&15;y=this.fetch()&15;this.r[x]=this.sph;this.r[y]=this.spl;break;case 3:x=this.fetch()&15;y=this.fetch()&15;this.sph=this.r[x];this.spl=this.r[y];break;
+ case 4:x=this.fetch()&15;y=this.fetch()&15;this.r[x]=this.pch;this.r[y]=this.pcl;break;case 5:x=this.fetch()&15;y=this.fetch()&15;this.pch=this.r[x];this.pcl=this.r[y];break;
+ case 6:case 7:x=this.fetch()&15;y=this.fetch()&15;q=sub===6?this.r[x]+this.r[y]:this.r[x]-this.r[y];this.flag(F.C,q>255||q<0);this.r[x]=this.zn(Math.max(0,Math.min(255,q)));break;
+ case 8:case 9:x=this.fetch()&15;y=this.fetch()&15;q=this.signed(this.r[x])+(sub===8?this.signed(this.r[y]):-this.signed(this.r[y]));this.flag(F.V,q>127||q< -128);this.r[x]=this.zn(Math.max(-128,Math.min(127,q)));break;
+ case 10:x=this.fetch()&15;y=this.fetch()&15;this.r[x]=this.zn((this.r[x]+this.r[y]+1)>>1);break;case 11:x=this.fetch()&15;y=this.fetch()&15;this.r[x]=this.zn(Math.abs(this.r[x]-this.r[y]));break;
+ case 12:x=this.fetch()&15;y=this.fetch()&15;a=this.r[x];b=this.r[y];while(b){q=a%b;a=b;b=q}this.r[x]=this.zn(a);break;case 13:x=this.fetch()&15;y=this.fetch()&15;a=this.r[x];b=this.r[y];q=1;while(b){if(b&1)q=U8(q*a);a=U8(a*a);b>>=1}this.r[x]=this.zn(q);break;
+ case 14:x=this.fetch()&15;this.r[x]=this.zn(Math.floor(Math.sqrt(this.r[x])));break;case 15:x=this.fetch()&15;this.r[x]=this.zn(this.r[x]?Math.floor(Math.log2(this.r[x])):0);break;
+ case 16:x=this.fetch()&15;y=this.fetch()&15;this.r[x]=this.zn((this.r[x]*this.r[y])>>8);break;case 17:x=this.fetch()&15;y=this.fetch()&15;if(!this.r[y])return this.faultAt('DIVREM by zero');q=this.r[x];this.r[x]=this.zn(Math.trunc(q/this.r[y]));this.r[15]=q%this.r[y];break;
+ case 18:x=this.fetch()&15;a=this.fetch();b=this.fetch();this.r[x]=this.zn(Math.max(a,Math.min(b,this.r[x])));break;case 19:x=this.fetch()&15;q=this.signed(this.r[x]);this.r[x]=this.zn(q<0?255:q>0?1:0);break;
+ case 20:x=this.fetch()&15;y=this.fetch()&15;z=this.fetch()&15;this.r[x]=this.r[this.has(F.Z)?y:z];break;case 21:case 22:x=this.fetch()&15;y=this.fetch()&15;q=sub===21?!this.has(F.Z)&&(this.has(F.N)===this.has(F.V)):this.has(F.N)!==this.has(F.V);if(q)this.r[x]=this.r[y];break;
+ case 23:a=this.fetchAddr();x=this.fetch()&15;y=this.fetch()&15;v=this.read8(a);this.sub(v,this.r[x]);if(v===this.r[x])this.write8(a,this.r[y]);else this.r[x]=v;break;case 24:x=this.fetch()&15;y=this.fetch()&15;v=this.r[x];this.r[x]=this.add(this.r[x],this.r[y]);this.r[y]=v;break;
+ case 25:a=this.fetchAddr();b=this.fetchAddr();v=this.read8(a);this.write8(a,this.read8(b));this.write8(b,v);break;case 26:this.dev.trace?.('FENCE',this);break;
+ case 27:x=this.fetch()&15;this.r[x]=this.zn(this.r[x]^(this.r[x]>>1));break;case 28:x=this.fetch()&15;v=this.r[x];for(q=v>>1;q;q>>=1)v^=q;this.r[x]=this.zn(v);break;
+ case 29:x=this.fetch()&15;v=this.r[x]||1;this.r[x]=this.zn((v>>1)^(-(v&1)&0xB8));break;case 30:x=this.fetch()&15;v=this.r[x];q=0;for(let i=0;i<8;i++)q=((q<<1)^(((q>>7)^(v>>(7-i)))&1?0x07:0))&255;this.r[x]=this.zn(q);break;
+ case 31:x=this.fetch()&15;v=this.r[x];q=0xC5;q=Math.imul(q^v,0x93)&255;q^=q>>4;this.r[x]=this.zn(q);break;
+ case 32:case 33:x=this.fetch()&15;y=this.fetch()&15;a=((this.r[x]>>4)*10+(this.r[x]&15));b=((this.r[y]>>4)*10+(this.r[y]&15));q=sub===32?a+b:a-b;this.flag(F.C,q>99||q<0);q=(q%100+100)%100;this.r[x]=this.zn((Math.trunc(q/10)<<4)|(q%10));break;
+ case 34:x=this.fetch()&15;v=this.r[x];if((v&15)>9||this.has(F.C))v+=6;if(v>0x9F||this.has(F.C))v+=0x60;this.r[x]=this.zn(v);break;
+ case 35:x=this.fetch()&15;y=this.fetch()&15;q=0;for(let i=0;i<4;i++){q|=((this.r[x]>>i)&1)<<(i*2);q|=((this.r[y]>>i)&1)<<(i*2+1)}this.r[x]=this.zn(q);break;case 36:x=this.fetch()&15;y=this.fetch()&15;v=this.r[x];a=b=0;for(let i=0;i<4;i++){a|=((v>>(i*2))&1)<<i;b|=((v>>(i*2+1))&1)<<i}this.r[x]=a;this.r[y]=b;this.zn(a);break;
+ case 37:case 38:x=this.fetch()&15;v=this.r[x]/256*Math.PI*2+(sub===38?Math.PI/2:0);this.r[x]=this.zn(Math.round(127.5+127.5*Math.sin(v)));break;case 39:x=this.fetch()&15;v=this.r[x];v^=v<<3;v=Math.imul(v,0x9D);v^=v>>5;this.r[x]=this.zn(v);break;
+ case 40:case 41:x=this.fetch()&15;v=this.r[x];this.vector(e=>sub===40?Math.min(e,v):Math.max(e,v));break;case 42:this.vector(e=>-e);break;case 43:this.vector(e=>Math.abs(this.signed(e)));break;
+ case 44:x=this.fetch()&15;v=this.r[x];q=true;this.vector(e=>{if(e!==v)q=false;return e});this.flag(F.Z,q);break;case 45:x=this.fetch()&15;v=this.r[x];this.vector(()=>v);break;
+ case 46:n=this.r[14];a=this.pair(8);b=this.pair(10);for(let i=0;i<n;i++)this.write8(U16(b+i),this.read8(U16(a+i)));break;case 47:x=this.fetch()&15;n=this.r[14];p=this.pair(8);q=0;for(let j=0;j<n;j++){v=this.read8(p+j);for(let i=0;i<8;i++)q=((q<<1)^(((q>>7)^(v>>(7-i)))&1?0x07:0))&255}this.r[x]=this.zn(q);break;
+ case 48:x=this.fetch()&15;if(!this.r[x])this.faultAt(`ASSERT failed in ${REG_LABEL[x]}`);break;case 49:x=this.fetch()&15;this.dev.trace?.(`${REG_LABEL[x]}=$${H(this.r[x])}`,this);break;case 50:this.breakRequested=true;break;case 51:{const pc=this.pc;this.reset(false);this.pc=pc}break;
+ case 52:x=this.fetch()&15;v=this.r[x]||1;this.rng.set([v,v^0xA5,U8(v*73),v^0x5A]);break;case 53:this.push16(this.pc);break;case 54:this.pc=this.pop16();break;
+ case 55:n=this.fetch();this.push(this.r[12]);this.r[12]=this.spl;this.sp=this.sp-n;break;case 56:this.spl=this.r[12];this.r[12]=this.pop();break;
+ case 57:n=this.r[14];a=this.pair(8);b=this.pair(10);q=0;for(let i=0;i<n;i++){const aa=this.read8(a+i),bb=this.read8(b+i);if(aa!==bb){q=this.sub(aa,bb);break}}if(!q)this.flag(F.Z,true);break;
+ case 58:x=this.fetch()&15;n=this.r[14];p=this.pair(8);q=-1;for(let i=0;i<n;i++)if(this.read8(p+i)===this.r[x]){q=i;break}this.flag(F.Z,q>=0);if(q>=0)this.setPair(8,p+q);break;
+ case 59:n=this.r[14];p=this.pair(8);arr=[];for(let i=0;i<n;i++)arr.push(this.read8(p+i));arr.reverse().forEach((e,i)=>this.write8(p+i,e));break;case 60:n=this.r[14];p=this.pair(8);arr=[];for(let i=0;i<n;i++)arr.push(this.read8(p+i));arr.sort((a,b)=>a-b).forEach((e,i)=>this.write8(p+i,e));break;
+ case 61:case 62:n=this.fetch()&7;this.vector(e=>n?(sub===61?((e<<n)|(e>>>(8-n))):((e>>>n)|(e<<(8-n)))):e);break;case 63:this.dev.magic?.(this.fetch(),this);break;default:this.faultAt(`extension $${H(sub)} unavailable`)}}
+ step(injected=null){if(this.halted||this.waiting)return false;if(this.sleepUntil&&performance.now()<this.sleepUntil)return false;this.sleepUntil=0;this._operands=[];this._reads=1;const at=this.pc;let op;if(injected==null){op=this.read8(at);this.ir=op;this.pc=at+1}else{op=U8(injected);this.ir=op}try{if(op<0x80){const d=(op>>1)&63,a=op&1;if(a){this.r[0]=this.zn(d)}else this.push(d)}else{const slot=(op>>1)&63,a=op&1;if(slot===63&&a){const sub=this.fetch();this.executeExt(sub)}else this.executeBase(slot,a)}}catch(e){this.faultAt(e.message)}this.tick(this._reads);this.trace.push({at,op,args:this._operands.slice(),end:this.pc,flags:this.flags,a:this.r[0]});if(this.trace.length>96)this.trace.shift();if(this.has(F.T))this.breakRequested=true;return true}
+ run(limit=100000){let n=0;while(!this.halted&&!this.waiting&&!this.breakRequested&&n++<limit)this.step();if(n>=limit)this.faultAt('execution budget exhausted');return n}
+}
+
+function nullDevices(){return{screenDirty:false,input:()=>0,output:()=>{},memoryWrite:()=>{},text:()=>{},tone:()=>{},trace:()=>{},magic:()=>{},fault:()=>{}}}
+const device={screenDirty:true,key:[],terminal:'BYTE//CROWN DEVICE BUS ONLINE\n',ports:new Uint8Array(16),pixelX:0,pixelY:0,pixelColor:0,
+ text(s){this.terminal=(this.terminal+s).slice(-12000)},clearTerminal(){this.terminal=''},
+ input(p,cpu){p&=15;if(p===0)return this.key.length?1:0;if(p===1){const v=this.key.shift()||0;if(v)cpu.waiting=false;return v}if(p===3)return cpu.random();if(p===4)return cpu.clock[0];if(p===13)return 16;if(p===14)return cpu.flags;return this.ports[p]},
+ output(p,v,cpu){p&=15;v=U8(v);this.ports[p]=v;if(p===0&&v===0)this.clearTerminal();else if(p===1)this.text(String.fromCharCode(v));else if(p===2)this.text(String(v)+' ');else if(p===3)this.text('$'+H(v)+' ');else if(p===6)this.pixelX=v&15;else if(p===7)this.pixelY=v&15;else if(p===8)this.pixelColor=v;else if(p===9)cpu.write8(0xF000+(this.pixelY<<4)+this.pixelX,this.pixelColor);else if(p===10)this.pitch=v;else if(p===11)this.duration=v;else if(p===12)this.tone(20+(this.pitch||0)*8,Math.max(20,(this.duration||8)*8));else if(p===15)this.text(`[TRACE $${H(v)}]`)},
+ tone(freq,dur){try{const AC=window.AudioContext||window.webkitAudioContext;this.ac=this.ac||new AC;const o=this.ac.createOscillator(),g=this.ac.createGain();o.type='square';o.frequency.value=Math.max(20,Math.min(5000,freq));g.gain.setValueAtTime(.035,this.ac.currentTime);g.gain.exponentialRampToValueAtTime(.0001,this.ac.currentTime+dur/1000);o.connect(g).connect(this.ac.destination);o.start();o.stop(this.ac.currentTime+dur/1000)}catch{}},
+ trace(s){this.text(`\n[${s}] `)},magic(n,cpu){if(n===0)this.clearTerminal();else if(n===1){cpu.mem.fill(0,0xF000,0xF100);this.screenDirty=true}else if(n===2)saveSnapshotLocal();else if(n===3)loadSnapshotLocal()},fault(s){this.text(`\nFAULT · ${s}\n`)},memoryWrite(){}}
+const cpu=new ByteCPU(device);let lastAssembly=null,running=false,selected={kind:'mem',addr:0x0200},memPage=0x02,disasmAt=0x0200,breakpoints=new Set,watchAddress=null,lastStatus='READY',toastTimer=0;
+const SHARE_COPY='BYTE//CROWN — a complete byte-native computer, assembler, debugger, and executable protocol in one self-contained HTML file.';
+const AI_SELECTORS=Object.freeze({app:'.app',source:'#source',demo:'#demoSelect',loadDemo:'#loadDemo',assemble:'#assemble',run:'#run',pause:'#pause',step:'#step',reset:'#reset',speed:'#speed',state:'#stateOut',registers:'#registers',memory:'#memory',disassembly:'#disasm',terminal:'#terminal',terminalInput:'#termInput',terminalSend:'#termSend',framebuffer:'#screen',share:'#shareBtn',support:'#supportBtn',guide:'#helpBtn',selfTest:'#testsBtn',ready:'#aiReady'});
+
+const DEMOS={
+crown:`; BYTE//CROWN — full machine demonstration
+.org $0200
+.entry start
+
+start:
+  PRINT "BYTE//CROWN ONLINE\\n"
+  LDI X, 0
+  LDI Y, 0
+  LDI E, $24
+
+bloom:
+  PIXEL X, Y, E
+  INC X
+  INC Y
+  ADDI E, 9
+  CMPI X, 16
+  JL bloom
+
+  LDI A, 250
+  LDI B, 10
+  ADD A, B
+  OUT $03, A
+  PRINT " <- wrapped byte with carry\\n"
+  GCD A, B
+  OUT $02, A
+  PRINT " <- GCD\\n"
+  HLT
+`,
+fibonacci:`; Fibonacci through byte registers
+.org $0200
+.entry start
+start:
+  LDI A, 0
+  LDI B, 1
+  LDI CX, 14
+loop:
+  OUT 2, A
+  MOV C, A
+  ADD C, B
+  MOV A, B
+  MOV B, C
+  LOOP loop
+  PRINT "\\nDONE\\n"
+  HLT
+`,
+interrupt:`; Software interrupt and vector table
+.org $0200
+.entry start
+.vector 3, handler
+start:
+  PRINT "BEFORE INT "
+  INT 3
+  PRINT " AFTER RTI\\n"
+  HLT
+handler:
+  PUSH A
+  LDI A, '!'
+  OUT 1, A
+  POP A
+  RTI
+`,
+vector:`; Array instructions over true byte memory
+.org $0100
+array: .byte 9,3,7,1,5,2,8,4
+.org $0200
+.entry start
+start:
+  LEA SI, array
+  LDI CX, 8
+  VSORT
+  LEA SI, array
+  LDI CX, 8
+  LDI B, 10
+  VADD B
+  LEA SI, array
+  LDI CX, 8
+print:
+  LDX A, SI
+  OUT 2, A
+  INC SIL
+  DJNZ CX, print
+  PRINT "\\nVECTOR COMPLETE\\n"
+  HLT
+`,
+pixel:`; 256 byte-pixels, generated by nested byte loops
+.org $0200
+.entry start
+start:
+  LDI Y, 0
+row:
+  LDI X, 0
+col:
+  MOV E, X
+  MULI E, 16
+  XOR E, Y
+  PIXEL X, Y, E
+  INC X
+  CMPI X, 16
+  JL col
+  INC Y
+  CMPI Y, 16
+  JL row
+  HLT
+`,
+data:`; The original one-byte law remains executable
+; 0 DDDDDD 0 = PUSH6 D
+; 0 DDDDDD 1 = LOAD6 D into A
+.org $0200
+.entry start
+start:
+  PUSH6 21
+  LOAD6 42
+  POP B
+  ADD A, B
+  OUT 2, A
+  PRINT " <- 42 + 21 from two pure data bytes\\n"
+  HLT
+`};
+
+function decodeAt(mem,addr){const at=U16(addr),op=mem[at];if(op<0x80){const d=(op>>1)&63,a=op&1;return{at,size:1,bytes:[op],text:`${a?'LOAD6':'PUSH6'} ${d}`,desc:`O=0 D=${d} A=${a}`}}const slot=(op>>1)&63,a=op&1,s=BASE[slot][a];let p=at+1,used=[op],actual=s;if(slot===63&&a){const sub=mem[U16(p++)];used.push(sub);actual=EXT[sub]||spec(`EXT?$${H(sub)}`,[],'unknown extension')}const vals=[];for(const type of actual.sig){if(type==='a'){const hi=mem[U16(p++)],lo=mem[U16(p++)];used.push(hi,lo);vals.push('$'+H((hi<<8)|lo,4))}else{const v=mem[U16(p++)];used.push(v);vals.push(type==='r'?`R${v&15}`:type==='p'?`$${H(v)}`:`#${H(v)}`)}}return{at,size:used.length,bytes:used,text:`${actual.m}${vals.length?' '+vals.join(', '):''}`,desc:actual.d}}
+function fnvMemory(mem){let h=0x811c9dc5;for(const b of mem){h^=b;h=Math.imul(h,0x01000193)}return h>>>0}
+function byteColor(v){const r=((v>>5)&7)*255/7,g=((v>>2)&7)*255/7,b=(v&3)*85;return`rgb(${r|0},${g|0},${b|0})`}
+function setStatus(msg,kind='ok'){lastStatus=msg;$('#statusText').innerHTML=`<b>${kind==='bad'?'FAULT':kind==='warn'?'PAUSE':'BYTE LAW'}:</b> ${esc(msg)}`;const chip=$('#runChip');chip.className='chip '+(kind==='bad'?'bad':kind==='warn'?'warn':'');chip.querySelector('span').textContent=cpu.fault?'FAULT':running?'RUNNING':cpu.halted?'HALTED':cpu.waiting?'WAITING':'READY';syncAutomationState()}
+function toast(msg){const el=$('#toast');el.textContent=msg;el.classList.add('on');clearTimeout(toastTimer);toastTimer=setTimeout(()=>el.classList.remove('on'),1600)}
+function renderCPU(){$('#pcOut').textContent=`${H(cpu.pch)}:${H(cpu.pcl)}`;$('#spOut').textContent=`${H(cpu.sph)}:${H(cpu.spl)}`;$('#irOut').textContent=H(cpu.ir);$('#marOut').textContent=`${H(cpu.marh)}:${H(cpu.marl)}`;$('#mdrOut').textContent=H(cpu.mdr);$('#clockOut').textContent=[...cpu.clock].reverse().map(x=>H(x)).join(':');$('#stateOut').textContent=cpu.fault?'FAULT':cpu.halted?'HALT':cpu.waiting?'WAIT':running?'RUN':'READY';$('#flags').innerHTML=FLAG_NAMES.map(([n,m,d])=>`<div class="flag ${cpu.has(m)?'on':''}" title="${d}">${n}</div>`).join('');$('#registers').innerHTML=[...cpu.r].map((v,i)=>`<button class="reg ${selected.kind==='reg'&&selected.index===i?'sel':''}" data-reg="${i}" data-testid="byte-crown-register-${i}" aria-label="Register R${i} ${REG_LABEL[i]} value ${v}"><span>R${i} · ${REG_LABEL[i]}</span><b>${H(v)} <small>${v}</small></b></button>`).join('');$$('[data-reg]').forEach(b=>b.onclick=()=>{selected={kind:'reg',index:+b.dataset.reg};syncLens();renderCPU()})}
+function renderMemory(){let html='<div></div>'+Array.from({length:16},(_,i)=>`<div class="mh">${H(i,1)}</div>`).join('');for(let y=0;y<16;y++){html+=`<div class="mh">${H(y,1)}</div>`;for(let x=0;x<16;x++){const a=(memPage<<8)|(y<<4)|x,v=cpu.mem[a],cl=[a===cpu.pc?'pc':'',a===cpu.sp?'sp':'',selected.kind==='mem'&&selected.addr===a?'sel':'',memPage===0xF0?'vram':''].join(' ');html+=`<button class="cell ${cl}" data-addr="${a}" data-testid="byte-crown-memory-${H(a,4)}" aria-label="Memory $${H(a,4)} value ${v}" title="$${H(a,4)} · ${B(v)}">${H(v)}</button>`}}$('#memory').innerHTML=html;$$('[data-addr]').forEach(b=>b.onclick=()=>{selected={kind:'mem',addr:+b.dataset.addr};syncLens();renderMemory()});$('#pageInput').value=H(memPage)}
+function renderDisasm(){let a=U16(disasmAt),rows=[];for(let i=0;i<48;i++){const d=decodeAt(cpu.mem,a),bp=breakpoints.has(a);rows.push(`<div class="ins ${a===cpu.pc?'current':''} ${bp?'breakpoint':''}" data-testid="byte-crown-instruction-${H(a,4)}"><button class="btn small bp" data-bp="${a}" aria-label="${bp?'Remove':'Set'} breakpoint at $${H(a,4)}">${bp?'●':'○'}</button><span class="addr">${H(a,4)}</span><span class="bytes">${fmtBytes(d.bytes)}</span><span class="op"><b>${esc(d.text)}</b><br><small>${esc(d.desc)}</small></span></div>`);a=U16(a+d.size)}$('#disasm').innerHTML=rows.join('');$$('[data-bp]').forEach(b=>b.onclick=()=>{const a=+b.dataset.bp;breakpoints.has(a)?breakpoints.delete(a):breakpoints.add(a);renderDisasm()})}
+function renderISA(){const q=$('#isaSearch').value.trim().toUpperCase(),rows=[];BASE.forEach((p,d)=>p.forEach((s,a)=>{const code=0x80|(d<<1)|a,text=`${s.m} ${s.sig.join('')}`;if(!q||(`${text} ${s.d}`).toUpperCase().includes(q))rows.push(`<div class="isaRow"><code>${H(code)}</code><b>${s.m}</b><span>${s.sig.join(',')||'—'}</span><span>${esc(s.d)} · O1/D${String(d).padStart(2,'0')}/A${a}</span></div>`)}));EXT.forEach((s,i)=>{if(!q||(`${s.m} ${s.d}`).toUpperCase().includes(q))rows.push(`<div class="isaRow"><code>FF ${H(i)}</code><b>${s.m}</b><span>${s.sig.join(',')||'—'}</span><span>${esc(s.d)} · extension ${i}</span></div>`)});$('#isaTable').innerHTML=rows.join('')||'<div class="body">No matching operator.</div>'}
+function lensByte(){return selected.kind==='reg'?cpu.r[selected.index]:cpu.mem[selected.addr]}function parseLooseByte(s){s=String(s).trim();if(/^0b[01]+$/i.test(s))return parseInt(s.slice(2),2)&255;if(/^[01]{8}$/.test(s))return parseInt(s,2);if(/^0x/i.test(s))return parseInt(s.slice(2),16)&255;if(/^\$/i.test(s))return parseInt(s.slice(1),16)&255;return U8(parseInt(s,10)||0)}function parsePageInput(s){s=String(s).trim();return /^[0-9a-f]{1,2}$/i.test(s)?parseInt(s,16):parseLooseByte(s)}function parseAddressInput(s,symbols={}){s=String(s).trim();if(/^[0-9a-f]{3,4}$/i.test(s))return parseInt(s,16);return evalExpr(s||'0',symbols)}
+function syncLens(v=lensByte()){v=U8(v);$('#lensValue').value='0x'+H(v);$('#lensTarget').textContent=selected.kind==='reg'?`target · R${selected.index} ${REG_LABEL[selected.index]}`:`target · memory $${H(selected.addr,4)}`;const bits=B(v),labs=['O','D5','D4','D3','D2','D1','D0','A'];$('#lensBits').innerHTML=bits.split('').map((b,i)=>`<button class="bit ${b==='1'?'on':''}" data-bit="${7-i}"><span>${labs[i]} · b${7-i}</span><b>${b}</b></button>`).join('');$$('[data-bit]').forEach(b=>b.onclick=()=>syncLens(parseLooseByte($('#lensValue').value)^(1<<+b.dataset.bit)));if(v<128){const d=(v>>1)&63,a=v&1;$('#lensMeaning').innerHTML=`<code>${B(v)}</code> · ${v} / $${H(v)}<br>DATA PLANE · payload <code>${String(d).padStart(2,'0')}</code> · <code>${a?'LOAD6 A':'PUSH6'}</code>`}else{const d=(v>>1)&63,a=v&1,s=BASE[d][a];$('#lensMeaning').innerHTML=`<code>${B(v)}</code> · ${v} / $${H(v)}<br>OPERATOR PLANE · slot <code>${d}</code> · action <code>${a}</code> · <code>${s.m}</code> ${esc(s.d)}`}}
+function renderScreen(){if(!device.screenDirty)return;device.screenDirty=false;const c=$('#screen'),x=c.getContext('2d');x.imageSmoothingEnabled=false;for(let y=0;y<16;y++)for(let q=0;q<16;q++){x.fillStyle=byteColor(cpu.mem[0xF000+y*16+q]);x.fillRect(q*16,y*16,16,16)}$('#pixelOut').textContent=`X ${H(device.pixelX)} · Y ${H(device.pixelY)} · COLOR ${H(device.pixelColor)}`}
+function renderIO(){const t=$('#terminal');if(t.textContent!==device.terminal){t.textContent=device.terminal;t.scrollTop=t.scrollHeight}const top=[];for(let i=1;i<=16;i++){const a=U16(cpu.sp+i);top.push(`<div class="stackCell"><span>${H(a,4)}</span><br><b>${H(cpu.mem[a])}</b></div>`)}$('#stack').innerHTML=top.join('');$('#stackMeta').textContent=`SP ${H(cpu.sp,4)} · top sixteen bytes`;$('#trace').textContent=cpu.trace.slice(-8).reverse().map(t=>`${H(t.at,4)}  ${H(t.op)} ${fmtBytes(t.args)}  A=${H(t.a)} F=${H(t.flags)}`).join('\n')||'trace waiting';$('#hashOut').textContent=`IMAGE FNV ${H(fnvMemory(cpu.mem),8)}`}
+function renderAll(full=true){renderCPU();if(full){renderMemory();renderDisasm();renderIO();renderScreen()}const chip=$('#runChip');chip.className='chip '+(cpu.fault?'bad':cpu.waiting||cpu.breakRequested?'warn':'');chip.querySelector('span').textContent=cpu.fault?'FAULT':running?'RUNNING':cpu.halted?'HALTED':cpu.waiting?'WAITING':'READY';syncAutomationState()}
+function loadAssembly(result){cpu.mem.fill(0);for(const [a,v] of result.memory)cpu.mem[a]=v;cpu.reset(false);cpu.pc=result.entry;selected={kind:'mem',addr:result.entry};memPage=result.entry>>8;disasmAt=result.entry;device.screenDirty=true;device.terminal='BYTE//CROWN DEVICE BUS ONLINE\n';lastAssembly=result;renderReceipt(result);renderAll();syncLens();setStatus(`${result.bytes} byte cells assembled · entry $${H(result.entry,4)} · ${result.warnings.length} warnings`);toast('machine image assembled')}
+function renderReceipt(r){if(!r.ok){$('#receiptMeta').textContent=`${r.errors.length} error(s)`;$('#assemblyOutput').innerHTML=r.errors.map(e=>`<span class="err">ERROR L${e.line} · ${esc(e.msg)}</span>`).join('\n');return}$('#receiptMeta').textContent=`${r.bytes} cells · $${H(r.min,4)}–$${H(r.max,4)}`;let out=r.listing.map(x=>`${H(x.addr,4)}  ${fmtBytes(x.bytes).padEnd(25)}  ${x.source.trim()}`).join('\n');if(r.warnings.length)out+='\n\n'+r.warnings.map(w=>`WARN L${w.line} · ${w.msg}`).join('\n');$('#assemblyOutput').textContent=out||'No bytes emitted.'}
+
+function assembleUI(){const r=assembleSource($('#source').value);renderReceipt(r);if(r.ok)loadAssembly(r);else{setStatus(`${r.errors.length} assembly error(s)`,'bad');toast('assembly needs attention')}return r}
+function stop(reason='paused'){running=false;if(reason)setStatus(reason,'warn');renderAll()}
+function stepUI(){running=false;cpu.breakRequested=false;if(cpu.halted&&!cpu.fault)cpu.halted=false;const at=cpu.pc;cpu.step();disasmAt=cpu.pc;if(watchAddress!=null&&((cpu.marh<<8)|cpu.marl)===watchAddress)stop('watchpoint reached');else setStatus(`stepped $${H(at,4)} → $${H(cpu.pc,4)}`);renderAll()}
+function frame(){if(!running)return;let quota=+$('#speed').value||1;if(cpu.sleepUntil&&performance.now()<cpu.sleepUntil)quota=0;let n=0;while(n<quota&&!cpu.halted&&!cpu.waiting&&!cpu.breakRequested&&!cpu.fault){if(breakpoints.has(cpu.pc)&&n===0){cpu.breakRequested=true;break}cpu.step();n++}if(cpu.halted||cpu.waiting||cpu.breakRequested||cpu.fault){running=false;const msg=cpu.halted?'program halted cleanly':cpu.waiting?'waiting for input byte':'breakpoint reached';setStatus(cpu.fault||msg,cpu.fault?'bad':cpu.halted?'ok':'warn')}disasmAt=cpu.pc;renderAll();if(running)requestAnimationFrame(frame)}
+function runUI(){if(cpu.fault){toast('reset the faulted CPU first');return}if(cpu.halted)cpu.halted=false;cpu.breakRequested=false;running=true;setStatus('executing byte stream');requestAnimationFrame(frame)}
+function lineUI(){const ta=$('#source'),before=ta.value.slice(0,ta.selectionStart),line=before.split('\n').length,col=before.length-before.lastIndexOf('\n');$('#cursorPos').textContent=`LN ${line} · COL ${col}`;$('#gutter').textContent=Array.from({length:ta.value.split('\n').length},(_,i)=>i+1).join('\n');$('#gutter').scrollTop=ta.scrollTop}
+function download(name,data,type='application/octet-stream'){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type}));a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
+function bytesToBase64(bytes){let s='';for(let i=0;i<bytes.length;i+=0x8000)s+=String.fromCharCode(...bytes.subarray(i,i+0x8000));return btoa(s)}function base64ToBytes(s){const b=atob(s),a=new Uint8Array(b.length);for(let i=0;i<b.length;i++)a[i]=b.charCodeAt(i);return a}
+function snapshot(){return{schema:'BYTE-CROWN-SNAPSHOT/2',source:$('#source').value,memory:bytesToBase64(cpu.mem),registers:[...cpu.r],cpu:{pch:cpu.pch,pcl:cpu.pcl,sph:cpu.sph,spl:cpu.spl,flags:cpu.flags,ir:cpu.ir,clock:[...cpu.clock],rng:[...cpu.rng]},device:{terminal:device.terminal,ports:[...device.ports]}}}
+function applySnapshot(s){if(s.schema!=='BYTE-CROWN-SNAPSHOT/2')throw Error('not a BYTE//CROWN snapshot');cpu.mem.set(base64ToBytes(s.memory));cpu.r.set(s.registers);cpu.pch=s.cpu.pch;cpu.pcl=s.cpu.pcl;cpu.sph=s.cpu.sph;cpu.spl=s.cpu.spl;cpu.flags=s.cpu.flags;cpu.ir=s.cpu.ir;cpu.clock.set(s.cpu.clock);cpu.rng.set(s.cpu.rng);cpu.halted=cpu.waiting=cpu.breakRequested=false;cpu.fault='';$('#source').value=s.source||'';device.terminal=s.device?.terminal||'';device.ports.set(s.device?.ports||[]);device.screenDirty=true;lineUI();renderAll();syncLens()}
+function saveSnapshotLocal(){localStorage.setItem('byte-crown-snapshot-v2',JSON.stringify(snapshot()));toast('snapshot sealed locally')}function loadSnapshotLocal(){const s=localStorage.getItem('byte-crown-snapshot-v2');if(s)applySnapshot(JSON.parse(s))}
+
+function machineStateName(){if(cpu.fault)return'fault';if(running)return'running';if(cpu.waiting)return'waiting';if(cpu.breakRequested)return'breakpoint';if(cpu.halted)return'halted';if(cpu.sleepUntil&&performance.now()<cpu.sleepUntil)return'sleeping';return'ready'}
+function syncAutomationState(){const root=document.documentElement;root.dataset.byteCrownReady=window.ByteCrownAI?.ready?'true':'booting';root.dataset.byteCrownState=machineStateName();root.dataset.byteCrownPc=H(cpu.pc,4);root.dataset.byteCrownSp=H(cpu.sp,4)}
+function assemblyReport(r){return{schema:'BYTE-CROWN-ASSEMBLY/2',ok:!!r.ok,bytes:r.bytes||0,entry:r.entry??null,min:r.min??null,max:r.max??null,errors:(r.errors||[]).map(x=>({...x})),warnings:(r.warnings||[]).map(x=>({...x})),symbols:{...(r.symbols||{})},listing:(r.listing||[]).map(x=>({addr:x.addr,bytes:[...x.bytes],source:x.source,line:x.line}))}}
+function automationState(){return{schema:'BYTE-CROWN-AI-STATE/1',version:'2.1',ready:!!window.ByteCrownAI?.ready,state:machineStateName(),running,pc:cpu.pc,sp:cpu.sp,ir:cpu.ir,mar:(cpu.marh<<8)|cpu.marl,mdr:cpu.mdr,flags:cpu.flags,flagBits:Object.fromEntries(FLAG_NAMES.map(([n,m])=>[n,!!(cpu.flags&m)])),registers:[...cpu.r],registerLabels:[...REG_LABEL],clock:[...cpu.clock],breakpoints:[...breakpoints].sort((a,b)=>a-b),watchAddress,terminal:device.terminal,keyboardQueued:device.key.length,ports:[...device.ports],imageHash:H(fnvMemory(cpu.mem),8),source:$('#source').value,assembly:lastAssembly?{ok:true,bytes:lastAssembly.bytes,entry:lastAssembly.entry,min:lastAssembly.min,max:lastAssembly.max,symbols:{...lastAssembly.symbols}}:null,lastStatus}}
+function markAutomationControls(){for(const[name,selector]of Object.entries(AI_SELECTORS)){const el=$(selector);if(!el)continue;el.dataset.ai=name;el.setAttribute('data-testid',`byte-crown-${name}`)}}
+async function copyText(text){if(navigator.clipboard?.writeText)try{await navigator.clipboard.writeText(text);return true}catch{}const box=document.createElement('textarea');box.value=text;box.readOnly=true;box.style.cssText='position:fixed;left:-9999px;top:0';document.body.appendChild(box);box.select();let ok=false;try{ok=document.execCommand('copy')}catch{}box.remove();if(!ok)throw Error('clipboard unavailable');return true}
+async function shareMachine(){const url=/^https?:$/.test(location.protocol)?location.href:'';const data={title:document.title,text:SHARE_COPY,...(url?{url}:{})};if(navigator.share)try{await navigator.share(data);toast('BYTE//CROWN shared');return{ok:true,method:'native',data}}catch(e){if(e?.name==='AbortError')return{ok:false,cancelled:true,method:'native',data}}const text=url?`${SHARE_COPY}\n${url}`:SHARE_COPY;try{await copyText(text);toast(url?'share link copied':'share text copied');return{ok:true,method:'clipboard',text}}catch(e){toast('sharing unavailable');return{ok:false,method:'unavailable',error:e.message,text}}}
+function automationRegister(reg){if(Number.isInteger(reg)&&reg>=0&&reg<16)return reg;return parseReg(reg)}
+function automationAddress(addr){return typeof addr==='number'?U16(addr):U16(parseAddressInput(String(addr),lastAssembly?.symbols||{}))}
+function automationSetSource(source){$('#source').value=String(source??'');lineUI();$('#source').dispatchEvent(new Event('input',{bubbles:true}));return{length:$('#source').value.length,lines:$('#source').value.split('\n').length}}
+function automationLoadDemo(name='crown',doAssemble=true){name=String(name).toLowerCase();if(!(name in DEMOS))throw Error(`unknown demo ${name}`);$('#demoSelect').value=name;automationSetSource(DEMOS[name]);const assembly=doAssemble?assemblyReport(assembleUI()):null;return{name,assembly,state:automationState()}}
+function automationReset(options={}){const clear=typeof options==='boolean'?options:!!options.clearMemory;running=false;cpu.reset(clear);if(!clear&&lastAssembly)cpu.pc=lastAssembly.entry;if(clear){lastAssembly=null;device.clearTerminal()}device.key.length=0;device.screenDirty=true;renderAll();syncLens();setStatus(clear?'CPU and memory cleared':'CPU reset; memory image preserved');return automationState()}
+function automationStep(count=1){count=Math.max(1,Math.min(100000,Math.trunc(Number(count)||1)));running=false;cpu.breakRequested=false;if(cpu.halted&&!cpu.fault)cpu.halted=false;let steps=0;while(steps<count&&!cpu.halted&&!cpu.waiting&&!cpu.breakRequested&&!cpu.fault){if(!cpu.step())break;steps++;if(watchAddress!=null&&((cpu.marh<<8)|cpu.marl)===watchAddress){cpu.breakRequested=true;break}}disasmAt=cpu.pc;renderAll();setStatus(`automation stepped ${steps} instruction${steps===1?'':'s'} · PC $${H(cpu.pc,4)}`,cpu.fault?'bad':cpu.breakRequested||cpu.waiting?'warn':'ok');return{steps,state:automationState()}}
+function automationRunToStop(limit=100000){limit=Math.max(1,Math.min(10000000,Math.trunc(Number(limit)||100000)));running=false;if(cpu.fault)return{steps:0,reason:'fault',state:automationState()};if(cpu.halted)cpu.halted=false;cpu.breakRequested=false;let steps=0,reason='';while(steps<limit&&!cpu.halted&&!cpu.waiting&&!cpu.breakRequested&&!cpu.fault){if(breakpoints.has(cpu.pc)){cpu.breakRequested=true;reason='breakpoint';break}if(!cpu.step()){reason=cpu.sleepUntil?'sleep':'stalled';break}steps++;if(watchAddress!=null&&((cpu.marh<<8)|cpu.marl)===watchAddress){cpu.breakRequested=true;reason='watchpoint';break}}if(!reason)reason=cpu.fault?'fault':cpu.halted?'halted':cpu.waiting?'waiting':cpu.breakRequested?'breakpoint':steps>=limit?'budget':'ready';if(steps>=limit&&!cpu.halted&&!cpu.waiting&&!cpu.breakRequested&&!cpu.fault){cpu.breakRequested=true;reason='budget'}disasmAt=cpu.pc;renderAll();setStatus(`automation ${reason} after ${steps} instruction${steps===1?'':'s'} · PC $${H(cpu.pc,4)}`,cpu.fault?'bad':reason==='halted'?'ok':'warn');return{steps,reason,state:automationState()}}
+function automationReadMemory(addr,length=1){addr=automationAddress(addr);length=Math.max(0,Math.min(65536,Math.trunc(Number(length)||0)));return Array.from({length},(_,i)=>cpu.mem[U16(addr+i)])}
+function automationWriteMemory(addr,values){addr=automationAddress(addr);if(typeof values==='number')values=[values];else if(typeof values==='string')values=[...new TextEncoder().encode(values)];else values=Array.from(values||[]);values.forEach((v,i)=>cpu.write8(U16(addr+i),v));device.screenDirty=true;renderAll();syncLens();return{address:addr,written:values.length,values:automationReadMemory(addr,values.length)}}
+function automationSendInput(value,newline=false){let bytes;if(typeof value==='number')bytes=[U8(value)];else if(typeof value==='string')bytes=[...new TextEncoder().encode(value)];else bytes=Array.from(value||[],U8);if(newline)bytes.push(10);device.key.push(...bytes);cpu.waiting=false;renderAll();return{queued:device.key.length,bytes}}
+function automationSetBreakpoint(addr,enabled=true){addr=automationAddress(addr);enabled?breakpoints.add(addr):breakpoints.delete(addr);renderDisasm();syncAutomationState();return{address:addr,enabled:breakpoints.has(addr),breakpoints:[...breakpoints].sort((a,b)=>a-b)}}
+function automationDisassemble(addr=cpu.pc,count=16){addr=automationAddress(addr);count=Math.max(1,Math.min(256,Math.trunc(Number(count)||16)));const rows=[];for(let i=0;i<count;i++){const d=decodeAt(cpu.mem,addr);rows.push({...d,bytes:[...d.bytes]});addr=U16(addr+d.size)}return rows}
+function automationWaitForStop(timeout=5000){timeout=Math.max(0,Number(timeout)||0);return new Promise((resolve,reject)=>{const start=performance.now(),poll=()=>{if(!running)return resolve(automationState());if(performance.now()-start>=timeout)return reject(Error('BYTE//CROWN wait timeout'));setTimeout(poll,16)};poll()})}
+function setupAutomationAPI(){markAutomationControls();const api={schema:'BYTE-CROWN-PLAYWRIGHT/1',version:'2.1',ready:true,selectors:AI_SELECTORS,capabilities:Object.freeze(['source','assembler','run','step','registers','memory','input','breakpoints','disassembly','snapshot','demos','self-test','share']),getState:automationState,getSource:()=>$('#source').value,setSource:automationSetSource,assemble(source){if(source!==undefined)automationSetSource(source);return assemblyReport(assembleUI())},loadDemo:automationLoadDemo,start(speed){if(speed!==undefined){const option=[...$('#speed').options].find(x=>+x.value===+speed);if(!option)throw Error('speed must be 1, 64, 1024, or 16384 instructions per frame');$('#speed').value=option.value}runUI();return automationState()},runToStop:automationRunToStop,runProgram(source,limit=100000){automationSetSource(source);const assembly=assemblyReport(assembleUI());return{assembly,execution:assembly.ok?automationRunToStop(limit):null}},pause(){stop('automation paused');return automationState()},step:automationStep,reset:automationReset,getRegister:reg=>cpu.r[automationRegister(reg)],setRegister(reg,value){const i=automationRegister(reg);cpu.r[i]=U8(value);renderAll();syncLens();return{register:i,label:REG_LABEL[i],value:cpu.r[i]}},setPC(value){cpu.pc=automationAddress(value);disasmAt=cpu.pc;renderAll();return cpu.pc},setSP(value){cpu.sp=automationAddress(value);renderAll();return cpu.sp},getFlags:()=>cpu.flags,setFlags(value){cpu.flags=U8(value);renderAll();return cpu.flags},readMemory:automationReadMemory,writeMemory:automationWriteMemory,getFramebuffer:()=>automationReadMemory(0xF000,256),sendInput:automationSendInput,getTerminal:()=>device.terminal,clearTerminal(){device.clearTerminal();renderIO();return''},setBreakpoint:automationSetBreakpoint,toggleBreakpoint(addr){addr=automationAddress(addr);return automationSetBreakpoint(addr,!breakpoints.has(addr))},clearBreakpoints(){breakpoints.clear();renderDisasm();syncAutomationState();return[]},setWatchpoint(addr=null){watchAddress=addr==null?null:automationAddress(addr);return watchAddress},disassemble:automationDisassemble,executeByte(value){running=false;cpu.breakRequested=false;cpu.halted=false;cpu.step(U8(value));renderAll();syncLens();return automationState()},selectMemory(addr){addr=automationAddress(addr);selected={kind:'mem',addr};memPage=addr>>8;renderMemory();syncLens();return addr},selectRegister(reg){const index=automationRegister(reg);selected={kind:'reg',index};renderCPU();syncLens();return index},openPane(name){const tab=$(`.tab[data-pane="${String(name)}"]`);if(!tab)throw Error(`unknown pane ${name}`);tab.click();return name},getSnapshot:snapshot,loadSnapshot(data){applySnapshot(data);return automationState()},selfTest:selfTests,share:shareMachine,waitForStop:automationWaitForStop};window.ByteCrownAI=Object.freeze(api);syncAutomationState();return window.ByteCrownAI}
+
+function executeForTest(src,limit=20000){const a=assembleSource(src);if(!a.ok)throw Error(a.errors.map(e=>e.msg).join('; '));const c=new ByteCPU(nullDevices());for(const [k,v] of a.memory)c.mem[k]=v;c.pc=a.entry;c.run(limit);return{c,a}}
+function selfTests(){const tests=[],T=(name,fn)=>{const t=performance.now();try{const detail=fn();tests.push({name,ok:detail!==false,detail:String(detail??'pass'),ms:performance.now()-t})}catch(e){tests.push({name,ok:false,detail:e.message,ms:performance.now()-t})}};
+ T('64 paired operator slots',()=>BASE.length===64&&BASE.every(x=>x.length===2));T('128 unique base mnemonics',()=>new Set(BASE.flat().map(x=>x.m)).size===128);T('64 functional extension names',()=>EXT.length===64&&new Set(EXT.map(x=>x.m)).size===64);T('O/DDDDDD/A opcode closure',()=>BASE.every((p,d)=>p.every((s,a)=>OP[s.m].opcode===(0x80|(d<<1)|a))));
+ T('data-plane PUSH6 and LOAD6',()=>{const {c}=executeForTest('.org $200\n.entry s\ns: PUSH6 21\nLOAD6 42\nPOP B\nHLT');return c.r[0]===42&&c.r[1]===21});
+ T('ALU wrap, carry, zero, parity',()=>{const {c}=executeForTest('.org $200\n.entry s\ns: LDI A,250\nLDI B,6\nADD A,B\nHLT');return c.r[0]===0&&c.has(F.C)&&c.has(F.Z)&&c.has(F.P)});
+ T('labels and conditional loop',()=>{const {c}=executeForTest('.org $200\n.entry s\ns: LDI A,0\nLDI CX,5\nl: INC A\nLOOP l\nHLT');return c.r[0]===5});
+ T('CALL / RET stack fidelity',()=>{const {c}=executeForTest('.org $200\n.entry s\ns: LDI A,3\nCALL f\nHLT\nf: INC A\nRET');return c.r[0]===4&&c.sp===0xFFDF});
+ T('absolute and indirect memory',()=>{const {c}=executeForTest('.org $100\nx: .byte 0\n.org $200\n.entry s\ns: LDI A,$A5\nST [x],A\nLEA SI,x\nLDX B,SI\nHLT');return c.r[1]===0xA5&&c.mem[0x100]===0xA5});
+ T('signed branch flags',()=>{const {c}=executeForTest('.org $200\n.entry s\ns: LDI A,$FF\nCMPI A,1\nJL yes\nLDI B,0\nHLT\nyes: LDI B,1\nHLT');return c.r[1]===1});
+ T('extension GCD and saturation',()=>{const {c}=executeForTest('.org $200\n.entry s\ns: LDI A,84\nLDI B,30\nGCD A,B\nLDI C,250\nLDI D,20\nSATADD C,D\nHLT');return c.r[0]===6&&c.r[2]===255});
+ T('vector sort and add',()=>{const {c}=executeForTest('.org $100\na: .byte 3,1,2\n.org $200\n.entry s\ns: LEA SI,a\nLDI CX,3\nVSORT\nLEA SI,a\nLDI CX,3\nLDI A,10\nVADD A\nHLT');return c.mem[0x100]===11&&c.mem[0x102]===13});
+ T('interrupt vector and RTI',()=>{const {c}=executeForTest('.org $200\n.entry s\n.vector 2,h\ns: LDI A,1\nINT 2\nHLT\nh: INC A\nRTI');return c.r[0]===2&&c.sp===0xFFDF});
+ T('framebuffer is byte-addressed',()=>{const {c}=executeForTest('.org $200\n.entry s\ns: LDI X,2\nLDI Y,3\nLDI E,$E3\nPIXEL X,Y,E\nHLT');return c.mem[0xF032]===0xE3});
+ T('expression parser precedence',()=>evalExpr('LOW($1234)+HIGH($1234)*2',{})===0x34+0x12*2);
+ const pass=tests.filter(x=>x.ok).length;return{schema:'BYTE-CROWN-SELFTEST/2',ok:pass===tests.length,pass,total:tests.length,tests}}
+function showTests(){const r=selfTests();$('#testSummary').innerHTML=`<b class="${r.ok?'pass':'fail'}">${r.pass}/${r.total} PASS</b>`;$('#testResults').innerHTML=r.tests.map(t=>`<div class="testRow"><b class="${t.ok?'pass':'fail'}">${t.ok?'PASS':'FAIL'}</b><span>${esc(t.name)}<br><small>${esc(t.detail)}</small></span><small>${t.ms.toFixed(2)} ms</small></div>`).join('');$('#testsDialog').showModal();setStatus(`${r.pass}/${r.total} executable machine proofs pass`,r.ok?'ok':'bad');return r}
+
+function bind(){
+ $('#loadDemo').onclick=()=>{$('#source').value=DEMOS[$('#demoSelect').value];lineUI();assembleUI()};$('#assemble').onclick=assembleUI;$('#run').onclick=runUI;$('#pause').onclick=()=>stop('execution paused');$('#step').onclick=stepUI;$('#reset').onclick=()=>{running=false;cpu.reset(false);if(lastAssembly)cpu.pc=lastAssembly.entry;device.screenDirty=true;setStatus('CPU reset; memory image preserved');renderAll();syncLens()};
+ $('#saveSource').onclick=()=>{localStorage.setItem('byte-crown-source-v2',$('#source').value);toast('source sealed locally')};$('#exportBtn').onclick=()=>{download('BYTE_CROWN_snapshot.json',JSON.stringify(snapshot(),null,2),'application/json');download('BYTE_CROWN_source.asm',$('#source').value,'text/plain');if(lastAssembly)download('BYTE_CROWN_64K.bin',cpu.mem,'application/octet-stream');toast('source, snapshot, and 64K image exported')};$('#importBtn').onclick=()=>$('#fileInput').click();
+ $('#fileInput').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{if(/\.json$/i.test(f.name))applySnapshot(JSON.parse(await f.text()));else if(/\.bin$/i.test(f.name)){const b=new Uint8Array(await f.arrayBuffer());cpu.mem.fill(0);cpu.mem.set(b.subarray(0,65536),b.length===65536?0:0x0200);cpu.reset(false);cpu.pc=b.length===65536?0:0x0200;device.screenDirty=true;renderAll();syncLens()}else{$('#source').value=await f.text();lineUI();assembleUI()}toast(`${f.name} imported`)}catch(x){setStatus(x.message,'bad')}e.target.value=''};
+ $('#copyListing').onclick=async()=>{try{await navigator.clipboard.writeText($('#assemblyOutput').textContent);toast('listing copied')}catch{toast('clipboard unavailable')}};
+ const src=$('#source');src.oninput=lineUI;src.onscroll=lineUI;src.onkeyup=lineUI;src.onclick=lineUI;src.onkeydown=e=>{if(e.key==='Tab'){e.preventDefault();const a=src.selectionStart,b=src.selectionEnd;src.setRangeText('  ',a,b,'end');lineUI()}if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){e.preventDefault();assembleUI()}};
+ $$('.tab').forEach(t=>t.onclick=()=>{$$('.tab').forEach(x=>x.classList.toggle('on',x===t));$$('.pane').forEach(p=>p.classList.toggle('on',p.id===`pane-${t.dataset.pane}`));if(t.dataset.pane==='disasm')renderDisasm();if(t.dataset.pane==='isa')renderISA()});
+ $('#pageGo').onclick=()=>{memPage=parsePageInput($('#pageInput').value);renderMemory()};$('#pagePC').onclick=()=>{memPage=cpu.pch;renderMemory()};$('#pageVRAM').onclick=()=>{memPage=0xF0;renderMemory()};$('#breakAdd').onclick=()=>{const a=U16(parseAddressInput($('#breakInput').value,lastAssembly?.symbols||{}));breakpoints.has(a)?breakpoints.delete(a):breakpoints.add(a);renderDisasm();toast(`breakpoint ${breakpoints.has(a)?'set':'cleared'} at $${H(a,4)}`)};
+ $('#disasmPC').onclick=()=>{disasmAt=cpu.pc;$('#disasmInput').value=H(disasmAt,4);renderDisasm()};$('#disasmGo').onclick=()=>{disasmAt=U16(parseAddressInput($('#disasmInput').value,lastAssembly?.symbols||{}));renderDisasm()};$('#isaSearch').oninput=renderISA;
+ $('#lensValue').onchange=()=>syncLens(parseLooseByte($('#lensValue').value));$$('[data-math]').forEach(b=>b.onclick=()=>{let a=parseLooseByte($('#lensValue').value),r=parseLooseByte($('#lensRhs').value);if(b.dataset.math==='add')a+=r;else if(b.dataset.math==='sub')a-=r;else if(b.dataset.math==='shl')a<<=r&7;else if(b.dataset.math==='shr')a>>>=r&7;else if(b.dataset.math==='and')a&=r;else if(b.dataset.math==='or')a|=r;else if(b.dataset.math==='xor')a^=r;else a=~a;syncLens(a)});$('#lensWrite').onclick=()=>{const v=parseLooseByte($('#lensValue').value);if(selected.kind==='reg')cpu.r[selected.index]=v;else cpu.write8(selected.addr,v);renderAll();syncLens();toast('byte written')};$('#lensExec').onclick=()=>{cpu.breakRequested=false;cpu.halted=false;cpu.step(parseLooseByte($('#lensValue').value));renderAll();syncLens();toast('selected byte executed')};$('#lensRandom').onclick=()=>syncLens(crypto.getRandomValues(new Uint8Array(1))[0]);
+ $('#clearTerminal').onclick=()=>{device.clearTerminal();renderIO()};$('#clearScreen').onclick=()=>{cpu.mem.fill(0,0xF000,0xF100);device.screenDirty=true;renderScreen()};function sendTerm(){const bytes=new TextEncoder().encode($('#termInput').value+'\n');device.key.push(...bytes);cpu.waiting=false;$('#termInput').value='';renderAll()}$('#termSend').onclick=sendTerm;$('#termInput').onkeydown=e=>{if(e.key==='Enter')sendTerm()};
+ $('#testsBtn').onclick=showTests;$('#helpBtn').onclick=()=>$('#guide').showModal();$('#shareBtn').onclick=shareMachine;$('#supportBtn').onclick=()=>toast('opening Cash App · $unixarcade');$$('[data-close]').forEach(b=>b.onclick=()=>$('#'+b.dataset.close).close());window.addEventListener('keydown',e=>{if(e.key==='F8'){e.preventDefault();stepUI()}if(e.key==='F9'){e.preventDefault();running?stop('execution paused'):runUI()}})
+}
+function init(){bind();const saved=localStorage.getItem('byte-crown-source-v2');$('#source').value=saved||DEMOS.crown;lineUI();renderISA();assembleUI();const proof=selfTests();$('#sourceMeta').textContent=`${proof.pass}/${proof.total} proofs · 128 base + 64 ext`;setStatus(`${proof.pass}/${proof.total} executable proofs pass · complete byte machine online`,proof.ok?'ok':'bad');const automation=setupAutomationAPI();window.ByteSuperMachine={version:'2.1',cpu,device,BASE,EXT,assemble:assembleSource,disassemble:decodeAt,selfTest:selfTests,demos:DEMOS,snapshot,loadSnapshot:applySnapshot,automation,run(src,limit){return executeForTest(src,limit)}};syncAutomationState();document.dispatchEvent(new CustomEvent('bytecrown:ready',{detail:{version:'2.1',api:'ByteCrownAI'}}))}
+init();
+})();
+</script>
+</body>
+</html>
