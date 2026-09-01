@@ -1,6 +1,6 @@
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="./assets/byte-crown-header-dark.svg">
-  <source media="(prefers-color-scheme: light)" srcset="./assets/byte-crown-header-light.svg">
+  <source media="(prefers-color-scheme: dark)" srcset="./byte-crown-header-dark.svg">
+  <source media="(prefers-color-scheme: light)" srcset="./byte-crown-header-light.svg">
   <img alt="BYTE//CROWN — computer, assembler, and protocol under one byte law" src="./assets/byte-crown-header-dark.svg" width="100%">
 </picture>
 
