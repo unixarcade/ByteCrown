@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="520" viewBox="0 0 1600 520" role="img" aria-labelledby="title desc">
+  <title id="title">BYTE//CROWN</title>
+  <desc id="desc">A neon-green architectural sigil for the byte-native O DDDDDD A computer, assembler, and protocol.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#020604"/>
+      <stop offset="0.58" stop-color="#07120a"/>
+      <stop offset="1" stop-color="#041017"/>
+    </linearGradient>
+    <linearGradient id="signal" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#65ff91"/>
+      <stop offset="0.62" stop-color="#caff79"/>
+      <stop offset="1" stop-color="#62f3ff"/>
+    </linearGradient>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M32 0H0V32" fill="none" stroke="#65ff91" stroke-opacity="0.045"/>
+    </pattern>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="8" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+  <rect x="5" y="5" width="1590" height="510" rx="34" fill="url(#bg)" stroke="#245638" stroke-width="2"/>
+  <rect x="22" y="22" width="1556" height="476" rx="24" fill="url(#grid)" stroke="#65ff91" stroke-opacity="0.24"/>
+  <path d="M58 90H430M58 430H1542M478 90H1542" stroke="url(#signal)" stroke-width="2" stroke-opacity="0.7"/>
+  <g filter="url(#glow)">
+    <rect x="58" y="120" width="372" height="278" rx="28" fill="#020604" stroke="#65ff91" stroke-width="3"/>
+    <text x="244" y="337" text-anchor="middle" fill="#65ff91" font-family="ui-monospace, SFMono-Regular, Consolas, monospace" font-size="238" font-weight="800">8</text>
+  </g>
+  <text x="490" y="177" fill="#f7fff8" font-family="ui-monospace, SFMono-Regular, Consolas, monospace" font-size="78" font-weight="800" letter-spacing="8">BYTE//CROWN</text>
+  <text x="494" y="225" fill="#8fb99a" font-family="ui-monospace, SFMono-Regular, Consolas, monospace" font-size="22" font-weight="700" letter-spacing="4">COMPUTER · ASSEMBLER · PROTOCOL · ONE BYTE LAW</text>
+  <g font-family="ui-monospace, SFMono-Regular, Consolas, monospace" text-anchor="middle">
+    <rect x="494" y="268" width="150" height="84" rx="16" fill="#0b2113" stroke="#65ff91" stroke-width="2"/>
+    <text x="569" y="316" fill="#f7fff8" font-size="34" font-weight="800">O</text>
+    <text x="569" y="379" fill="#75947d" font-size="15" letter-spacing="2">PLANE</text>
+    <rect x="665" y="268" width="612" height="84" rx="16" fill="#0b2113" stroke="#caff79" stroke-width="2"/>
+    <text x="971" y="316" fill="#f7fff8" font-size="34" font-weight="800" letter-spacing="18">DDDDDD</text>
+    <text x="971" y="379" fill="#75947d" font-size="15" letter-spacing="2">SIX-BIT PAYLOAD / OPERATOR SLOT</text>
+    <rect x="1298" y="268" width="150" height="84" rx="16" fill="#0a1c20" stroke="#62f3ff" stroke-width="2"/>
+    <text x="1373" y="316" fill="#f7fff8" font-size="34" font-weight="800">A</text>
+    <text x="1373" y="379" fill="#75947d" font-size="15" letter-spacing="2">ACTION</text>
+  </g>
+  <circle cx="494" cy="429" r="5" fill="#65ff91" filter="url(#glow)"/>
+  <text x="514" y="437" fill="#caffd5" font-family="ui-monospace, SFMono-Regular, Consolas, monospace" font-size="20" font-weight="700" letter-spacing="2">NOTHING WIDER ENTERS · WIDTH EMERGES FROM COOPERATING BYTES</text>
+  <text x="1538" y="477" text-anchor="end" fill="#4f7659" font-family="ui-monospace, SFMono-Regular, Consolas, monospace" font-size="14" letter-spacing="3">LUMINOSITY / UNIXARCADE · v2.1</text>
+</svg>
